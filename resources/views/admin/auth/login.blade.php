@@ -34,7 +34,6 @@
     <link href="{{asset('backend/lib/font-awesome/css/font-awesome.css')}}" rel="stylesheet">
     <link href="{{asset('backend/lib/Ionicons/css/ionicons.css')}}" rel="stylesheet">
 
-
     <!-- Starlight CSS -->
     <link rel="stylesheet" href="{{asset('backend/css/starlight.css')}}">
   </head>
@@ -42,30 +41,29 @@
   <body>
 
     <div class="d-flex align-items-center justify-content-center bg-sl-primary ht-100v">
-
       <div class="login-wrapper wd-300 wd-xs-350 pd-25 pd-xs-40 bg-white">
         <div class="signin-logo tx-center tx-24 tx-bold tx-inverse">My Eshop <span class="tx-info tx-normal">Admin</span></div>
         <br>
         <form method="POST" action="{{ route('admin.login') }}">
-            @csrf
-            <div class="form-group">
-            <input placeholder="Your Email..." id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
-                @if ($errors->has('email'))
-                    <span class="invalid-feedback">
-                        <strong>{{ $errors->first('email') }}</strong>
-                    </span>
-                @endif
-            </div><!-- form-group -->
-            <div class="form-group">
-            <input placeholder="Your Password..." id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-                @if ($errors->has('password'))
-                    <span class="invalid-feedback">
-                        <strong>{{ $errors->first('password') }}</strong>
-                    </span>
-                @endif
+          @csrf
+          <div class="form-group">
+            <input placeholder="Your Email..." id="email" type="text" class="form-control" name="email" value="{{ old('email') }}">
+              @error('email')
+                <span class="invalid-feedback mb-4" role="alert">
+                  <strong>{{ $message }}</strong>
+                </span>
+              @enderror
+          </div><!-- form-group -->
+          <div class="form-group">
+            <input placeholder="Your Password..." id="password" type="password" class="form-control" name="password">
+              @if ($errors->has('password'))
+                <span class="invalid-feedback">
+                  <strong>{{ $errors->first('password') }}</strong>
+                </span>
+              @endif
             <a href="#" class="tx-info tx-12 d-block mg-t-10">Forgot password?</a>
-            </div><!-- form-group -->
-            <button type="submit" class="btn btn-info btn-block">Login</button>
+          </div><!-- form-group -->
+          <button type="submit" class="btn btn-info btn-block">Login</button>
         </form>
         <div class="mg-t-60 tx-center">Not yet a member? <a href="{{ route('admin.register') }}" class="tx-info">Create an Account</a></div>
       </div><!-- login-wrapper -->

@@ -1,6 +1,6 @@
 <?php
 
-use RealRashid\SweetAlert\Facades\Alert;
+// use RealRashid\SweetAlert\Facades\Alert;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +14,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 // BACKEND
 Route::namespace("Admin")->prefix('admin')->group(function(){
-	Route::get('/', 'HomeController@index')->name('admin.home');
+	Route::get('/', 'HomeController@index')->name('admin.dashboard');
 	Route::namespace('Auth')->group(function(){
 		Route::get('/login', 'LoginController@showLoginForm')->name('admin.login');
 		Route::post('/login', 'LoginController@login');
@@ -22,54 +22,30 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 		Route::get('/register', 'RegisterController@showRegisterForm')->name('admin.register');
 		Route::post('/register', 'RegisterController@register');
 	});
-});
 
-// Categories backend
-Route::prefix('admin')->group(function () {
-    Route::get('category', 'Admin\CategoryController@index')->name('category.index');
-    Route::post('category', 'Admin\CategoryController@store')->name('category.store');
-    Route::get('category/create', 'Admin\CategoryController@create')->name('category.create');
-    Route::put('category/{id}', 'Admin\CategoryController@update')->name('category.update');
-    Route::get('category/{id}', 'Admin\CategoryController@show')->name('category.show');
-    Route::delete('category/{id}', 'Admin\CategoryController@destroy')->name('category.destroy');
-    Route::get('category/{id}/edit', 'Admin\CategoryController@edit')->name('category.edit');
-});
+    // Admins
+    Route::resource('admins', 'AdminController');
 
-// Subcategories backend
-Route::prefix('admin')->group(function () {
-    Route::get('subcategory', 'Admin\SubcategoryController@index')->name('subcategory.index');
-    Route::post('subcategory', 'Admin\SubcategoryController@store')->name('subcategory.store');
-    Route::get('subcategory/create', 'Admin\SubcategoryController@create')->name('subcategory.create');
-    Route::put('subcategory/{id}', 'Admin\SubcategoryController@update')->name('subcategory.update');
-    Route::get('subcategory/{id}', 'Admin\SubcategoryController@show')->name('subcategory.show');
-    Route::delete('subcategory/{id}', 'Admin\SubcategoryController@destroy')->name('subcategory.destroy');
-    Route::get('subcategory/{id}/edit', 'Admin\SubcategoryController@edit')->name('subcategory.edit');
-});
+    //Users
+    Route::resource('users', 'UserController');
 
-// Brands backend
-Route::prefix('admin')->group(function () {
-    Route::get('brand', 'Admin\BrandController@index')->name('brand.index');
-    Route::post('brand', 'Admin\BrandController@store')->name('brand.store');
-    Route::get('brand/create', 'Admin\BrandController@create')->name('brand.create');
-    Route::put('brand/{id}', 'Admin\BrandController@update')->name('brand.update');
-    Route::get('brand/{id}', 'Admin\BrandController@show')->name('brand.show');
-    Route::delete('brand/{id}', 'Admin\BrandController@destroy')->name('brand.destroy');
-    Route::get('brand/{id}/edit', 'Admin\BrandController@edit')->name('brand.edit');
-});
+    // Categories
+    Route::resource('categories', 'CategoryController');
 
-// Products backend
-Route::prefix('admin')->group(function () {
-    Route::get('product', 'Admin\ProductController@index')->name('product.index');
-    Route::post('product', 'Admin\ProductController@store')->name('product.store');
-    Route::get('product/create', 'Admin\ProductController@create')->name('product.create');
-    Route::put('product/{id}', 'Admin\ProductController@update')->name('product.update');
-    Route::get('product/{id}', 'Admin\ProductController@show')->name('product.show');
-    Route::delete('product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
-    Route::get('product/{id}/edit', 'Admin\ProductController@edit')->name('product.edit');
-    Route::get('product/{id}/active', 'Admin\ProductController@active')->name('product.active');
-    Route::get('product/{id}/inactive', 'Admin\ProductController@inactive')->name('product.inactive');
+    // Subcategories
+    Route::resource('subcategories', 'SubcategoryController');
 
-    Route::post('product/getSubcategory', 'Admin\ProductController@getSubcategory')->name('product.getSubcategory');
+    // Brands
+    Route::resource('brands', 'BrandController');
+
+    // Products
+    Route::resource('products', 'ProductController');
+    Route::get('products/{id}/active', 'ProductController@active')->name('products.active');
+    Route::get('products/{id}/inactive', 'ProductController@inactive')->name('products.inactive');
+    Route::post('products/getSubcategory', 'ProductController@getSubcategory')->name('products.getSubcategory');
+
+    // Orders
+    Route::resource('orders', 'OrderController');
 });
 
 
@@ -100,8 +76,8 @@ Route::get('/contact', 'PageController@showContact')->name('contact');
 // Cart
 Route::post('/cart/add', 'CartController@addToCart')->name('cart.add');
 Route::get('/cart/index', 'CartController@showCart')->name('cart.index');
-Route::get('/cart/remove/{product_id}', 'CartController@removeCartItem')->name('cart.remove');
-Route::post('/cart/update/{product_id}', 'CartController@updateCart')->name('cart.update');
+Route::delete('/cart/remove/{id}', 'CartController@removeCartItem')->name('cart.remove');
+Route::patch('/cart/update', 'CartController@updateCart')->name('cart.update'); 
 
 // Checkout
 Route::get('/checkout', 'CheckoutController@checkout')->name('checkout');

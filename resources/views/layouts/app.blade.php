@@ -25,6 +25,11 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{asset('frontend/css/style.css')}}" rel="stylesheet">
 
+    <!-- Ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
@@ -156,15 +161,21 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                                     <a href="{{route('cart.index')}}" class="dropdown-item">Shopping Cart</a>
-                                    <a href="#" class="dropdown-item">Checkout</a>
+                                    <a href="{{route('checkout')}}" class="dropdown-item">Checkout</a>
                                 </div>
                             </div>
                             <a href="{{route('contact')}}" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
+                            @auth
+                                <a href="{{route('wishlist.show', Auth::user()->id)}}" class="btn px-0 ml-2">
+                                    <i class="fas fa-heart text-primary"></i>
+                                    <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                                </a>
+                            @endauth
                             <a href="{{route('cart.index')}}" class="btn px-0 ml-3">
                                 <i class="fas fa-shopping-cart text-primary"></i>
-                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{Cart::count()}}</span>
+                                <span id="cart-count" class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{Cart::count()}}</span>
                             </a>
                         </div>
                     </div>
@@ -261,11 +272,12 @@
     <script src="{{asset('frontend/mail/contact.js')}}"></script>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="sweetalert2.all.min.js"></script>
+    {{-- <script src="sweetalert2.all.min.js"></script> --}}
 
-    {{-- Add to Wishlist Ajax --}}
+    
     <script type="text/javascript">
         $(document).ready(function() {
+            // Add to Wishlist Ajax 
             $('.addWishlist').on('click', function(event) {
                 event.preventDefault();
                 var id = $(this).data('id');
@@ -273,7 +285,7 @@
                     url: "/wishlist/add/"+id,
                     type:"GET",
                     datType:"json",
-                    success:function(data){
+                    success: function(data) {
                         const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -281,25 +293,67 @@
                         timer: 3000,
                         timerProgressBar: true,
                         onOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                        });
+    
+                        if($.isEmptyObject(data.error)) {   
+                            Toast.fire({
+                            icon: 'success',
+                            title: data.success
+                            })
+                        } else {
+                            Toast.fire({
+                            icon: 'error',
+                            title: data.error
+                            })
+                        }
                     }
-                    });
-    
-                    if($.isEmptyObject(data.error)) {   
-                        Toast.fire({
-                        icon: 'success',
-                        title: data.success
-                        })
-                    } else {
-                        Toast.fire({
-                        icon: 'error',
-                        title: data.error
-                        })
-                    }
-    
-    
+                });
+            });  
+            
+            // Add to Cart Ajax 
+            $('.addToCart').on('click', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: "/cart/add",
+                    type:"POST",
+                    datType:"json",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        product_id: $(this).data('id'),
+                        product_color: $('#color').find(":selected").val(),
+                        product_qty: $('#qty').val()
                     },
+                    success: function(data) {
+                        var cartCountElement = $("#cart-count");
+                        var cartCount = Number(data['cartCount']);
+                        cartCountElement.html(cartCount);
+                        const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        onOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                        });
+    
+                        if($.isEmptyObject(data.error)) {   
+                            Toast.fire({
+                            icon: 'success',
+                            title: data.success
+                            })
+                        } else {
+                            Toast.fire({
+                            icon: 'error',
+                            title: data.error
+                            })
+                        }
+                    }
                 });
             });   
         });

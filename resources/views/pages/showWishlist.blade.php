@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('layouts.breadcrumb')
+
 <!-- Cart Start -->
 <div class="container-fluid">
     <div class="row px-xl-5">

@@ -7,31 +7,25 @@
         <h5>Add New Product Form</h5>
     </div><!-- sl-page-title -->
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @include('admin.layouts.response_message') 
 
     <div class="card pd-20 pd-sm-40">
         <div class="form-layout">
-            <form action="{{route('product.store')}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('products.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label>Product Name: <span class="tx-danger">*</span></label>
-                            <input class="form-control" type="text" name="product_name" placeholder="Enter product name...">
+                            <input class="form-control" type="text" name="product_name" placeholder="Enter product name..." value="{{old('product_name')}}">
+                            <span class="text-danger">@error('product_name') {{$message}} @enderror</span>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label>Product Code: <span class="tx-danger">*</span></label>
-                            <input class="form-control" type="text" name="product_code" placeholder="Enter product code...">
+                            <input class="form-control" type="text" name="product_code" placeholder="Enter product code..." value="{{old('product_code')}}">
+                            <span class="text-danger">@error('product_code') {{$message}} @enderror</span>
                         </div>
                     </div>
                 </div>
@@ -39,19 +33,22 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Selling Price: <span class="tx-danger">*</span></label>
-                            <input class="form-control" type="text" name="selling_price" placeholder="Enter selling price...">
+                            <input class="form-control" type="text" name="selling_price" placeholder="Enter selling price..." value="{{old('selling_price')}}">
+                            <span class="text-danger">@error('selling_price') {{$message}} @enderror</span>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Discount Price: <span class="tx-danger">*</span></label>
-                            <input class="form-control" type="text" name="discount_price" placeholder="Enter discount price...">
+                            <input class="form-control" type="text" name="discount_price" placeholder="Enter discount price..." value="{{old('discount_price')}}">
+                            <span class="text-danger">@error('discount_price') {{$message}} @enderror</span>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Product Quantity: <span class="tx-danger">*</span></label>
-                            <input class="form-control" type="text" name="product_quantity" placeholder="Enter product quantity...">
+                            <input class="form-control" type="text" name="product_quantity" placeholder="Enter product quantity..." value="{{old('product_quantity')}}">
+                            <span class="text-danger">@error('product_quantity') {{$message}} @enderror</span>
                         </div>
                     </div>
                 </div>
@@ -66,14 +63,14 @@
                                 <option value="{{$category->id}}">{{$category->category_name}}</option>
                                 @endforeach
                             </select>
+                            <span class="text-danger">@error('category_id') {{$message}} @enderror</span>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group mg-b-10-force">
                             <label>Subcategory: <span class="tx-danger">*</span></label>
-                            <select class="form-control select2" name="subcategory_id" id="subcategory">
-                                
-                            </select>
+                            <select class="form-control select2" name="subcategory_id" id="subcategory"></select>
+                            <span class="text-danger">@error('subcategory_id') {{$message}} @enderror</span>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -85,6 +82,7 @@
                                 <option value="{{$brand->id}}">{{$brand->brand_name}}</option>
                                 @endforeach
                             </select>
+                            <span class="text-danger">@error('brand_id') {{$message}} @enderror</span>
                         </div>
                     </div>
                 </div>
@@ -93,18 +91,21 @@
                         <div class="form-group">
                             <label>Product Size: <span class="tx-danger">*</span></label>
                             <input class="form-control" type="text" name="product_size" id="product_size" data-role="tagsinput" placeholder="Enter product size...">
+                            <span class="text-danger">@error('product_size') {{$message}} @enderror</span>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Product Color: <span class="tx-danger">*</span></label>
                             <input class="form-control" type="text" name="product_color" id="product_color" data-role="tagsinput" placeholder="Enter product color...">
+                            <span class="text-danger">@error('product_color') {{$message}} @enderror</span>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label>Video Link: <span class="tx-danger">*</span></label>
-                            <input class="form-control" type="text" name="video_link" placeholder="Enter video link...">
+                            <input class="form-control" type="text" name="video_link" placeholder="Enter video link..." >
+                            <span class="text-danger">@error('video_link') {{$message}} @enderror</span>
                         </div>
                     </div>
                 </div>
@@ -113,6 +114,7 @@
                         <div class="form-group">
                             <label>Image 1(Main Thumbnail): <span class="tx-danger">*</span></label>
                             <input class="form-control" type="file" name="image_1" onchange="readURL1(this);">
+                            <span class="text-danger">@error('image_1') {{$message}} @enderror</span>
                         </div>
                         <img src="#" alt="" id="image_1">
                     </div>
@@ -120,6 +122,7 @@
                         <div class="form-group">
                             <label>Image 2: <span class="tx-danger">*</span></label>
                             <input class="form-control" type="file" name="image_2" onchange="readURL2(this);">
+                            <span class="text-danger">@error('image_2') {{$message}} @enderror</span>
                         </div>
                         <img src="#" alt="" id="image_2">
                     </div>
@@ -127,6 +130,7 @@
                         <div class="form-group">
                             <label>Image 3: <span class="tx-danger">*</span></label>
                             <input class="form-control" type="file" name="image_3" onchange="readURL3(this);">
+                            <span class="text-danger">@error('image_3') {{$message}} @enderror</span>
                         </div>
                         <img src="#" alt="" id="image_3">
                     </div>
@@ -135,7 +139,8 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label>Product Detail: <span class="tx-danger">*</span></label>
-                            <textarea id="article-ckeditor" class="form-control" name="product_detail"></textarea>
+                            <textarea id="article-ckeditor" class="form-control" name="product_detail" value="{{old('product_detail')}}"></textarea>
+                            <span class="text-danger">@error('product_detail') {{$message}} @enderror</span>
                         </div>
                     </div>
                 </div>
@@ -193,7 +198,7 @@
         $('#category').change(function() {
             let category_id = $(this).val();
             $.ajax({
-                url:'/admin/product/getSubcategory',
+                url:'/admin/products/getSubcategory',
                 type:'post',
                 data:'category_id=' + category_id + '&_token={{csrf_token()}}',
                 success:function(result) {

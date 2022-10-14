@@ -29,10 +29,10 @@ class CreateProductsTable extends Migration
             $table->integer('discount_price');
             $table->text('product_detail');
             
-            $table->string('image_1');
-            $table->string('image_2');
-            $table->string('image_3');
-            $table->string('video_link');
+            $table->string('image_1')->nullable();
+            $table->string('image_2')->nullable();
+            $table->string('image_3')->nullable();
+            $table->string('video_link')->nullable();
 
             $table->integer('main_slider');
             $table->integer('hot_deal');

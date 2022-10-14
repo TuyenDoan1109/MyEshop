@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Brand;
+use App\Product;
 
 class BrandController extends Controller
 {
@@ -32,7 +33,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.brands.create');
     }
 
     /**
@@ -69,7 +70,7 @@ class BrandController extends Controller
         $brand->brand_logo = $filenameToStore;
         $brand->save();
 
-        return redirect(route('brand.index'))->with('toast_success', 'Brand Created Successfully');
+        return redirect(route('brands.index'))->with('success', 'Brand Created Successfully');
     }
 
     /**
@@ -105,7 +106,7 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'brand_name' => 'required',
+            'brand_name' => 'required|unique:brands|max:255',
             'brand_logo' => 'image|nullable|max:1999'
         ]);
 
@@ -132,7 +133,7 @@ class BrandController extends Controller
         }
         $brand->save();
 
-        return redirect(route('brand.index'))->with('toast_success', 'Brand Updated Successfully');
+        return redirect(route('brands.index'))->with('success', 'Brand Updated Successfully');
     }
 
     /**
@@ -144,11 +145,17 @@ class BrandController extends Controller
     public function destroy($id)
     {
         $brand = Brand::find($id);
-        if($brand->brand_logo != 'noimage.jpg') {
-            // Delete image
-            Storage::delete('public/backend/img/' . $brand->brand_logo);
+
+        $products = Product::where('brand_id', $id)->get();
+        if(count($products) > 0) {
+            return redirect(route('brands.index'))->with('error', 'Removed products belong to this brand first');
+        } else {
+            if($brand->brand_logo != 'noimage.jpg') {
+                // Delete image
+                Storage::delete('public/backend/img/' . $brand->brand_logo);
+            }
+            $brand->delete();
+            return redirect(route('brands.index'))->with('success', 'Brand Deleted Successfully');
         }
-        $brand->delete();
-        return redirect(route('brand.index'))->with('toast_success', 'Brand Deleted Successfully');
     }
 }

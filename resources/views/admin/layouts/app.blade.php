@@ -11,6 +11,8 @@
 
         <title>{{config('app.name', 'MyEshopAdmin')}}</title>
 
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
         <!-- vendor css -->
         <link href="{{asset('backend/lib/font-awesome/css/font-awesome.css')}}" rel="stylesheet">
         <link href="{{asset('backend/lib/Ionicons/css/ionicons.css')}}" rel="stylesheet">
@@ -30,50 +32,98 @@
     <body>
 
         <!-- ########## START: LEFT PANEL ########## -->
-        <div class="sl-logo"><a href="{{route('admin.home')}}"><i class="icon ion-android-star-outline"></i> My Eshop</a></div>
+        <div class="sl-logo"><a href="{{route('admin.dashboard')}}"><i class="icon ion-android-star-outline"></i> My Eshop</a></div>
         <div class="sl-sideleft">
         <div class="sl-sideleft-menu">
 
-            <a href="{{route('admin.home')}}" class="sl-menu-link">
+            <a href="{{route('admin.dashboard')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'admin.dashboard') === 0)
+                active
+            @endif
+            ">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon icon ion-ios-home-outline tx-22"></i>
                     <span class="menu-item-label">Dashboard</span>
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
 
-            <a href="{{route('category.index')}}" class="sl-menu-link">
+            <a href="{{route('categories.index')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'categories') === 0)
+                active
+            @endif
+            ">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
                     <span class="menu-item-label">Category</span>
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
 
-            <a href="{{route('subcategory.index')}}" class="sl-menu-link">
+            <a href="{{route('subcategories.index')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'subcategories') === 0)
+                active
+            @endif
+            ">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
                     <span class="menu-item-label">Subcategory</span>
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
 
-            <a href="{{route('brand.index')}}" class="sl-menu-link">
+            <a href="{{route('brands.index')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'brands') === 0)
+                active
+            @endif
+            ">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
                     <span class="menu-item-label">Brand</span>
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
 
-            <a href="#" class="sl-menu-link">
+            <a href="{{route('products.index')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'products') === 0)
+                active
+            @endif
+            ">
                 <div class="sl-menu-item">
-                    <i class="menu-item-icon ion-ios-pie-outline tx-20"></i>
+                    <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
                     <span class="menu-item-label">Products</span>
-                    <i class="menu-item-arrow fa fa-angle-down"></i>
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
-            <ul class="sl-menu-sub nav flex-column">
-                <li class="nav-item"><a href="{{route('product.create')}}" class="nav-link">Add Product</a></li>
-                <li class="nav-item"><a href="{{route('product.index')}}" class="nav-link">All Products</a></li>
-            </ul>
-            
+
+            <a href="{{route('admins.index')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'admins') === 0)
+                active
+            @endif
+            ">
+                <div class="sl-menu-item">
+                    <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
+                    <span class="menu-item-label">Admins</span>
+                </div><!-- menu-item -->
+            </a><!-- sl-menu-link -->
+
+            <a href="{{route('users.index')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'users') === 0)
+                active
+            @endif
+            ">
+                <div class="sl-menu-item">
+                    <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
+                    <span class="menu-item-label">Users</span>
+                </div><!-- menu-item -->
+            </a><!-- sl-menu-link -->
+
+            <a href="{{route('orders.index')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'orders') === 0)
+                active
+            @endif
+            ">
+                <div class="sl-menu-item">
+                    <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
+                    <span class="menu-item-label">Orders</span>
+                </div><!-- menu-item -->
+            </a><!-- sl-menu-link -->
+
         </div><!-- sl-sideleft-menu -->
 
         <br>
@@ -103,7 +153,7 @@
                                         document.getElementById('logout-form').submit();">
                                         <i class="icon ion-power"></i>{{ __('Logout') }}
                                     </a>
-                                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST"   style="display: none;">
+                                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
                                 </li>
@@ -147,10 +197,6 @@
         <script>
             CKEDITOR.replace( 'article-ckeditor' );
         </script>
-
-        @include('sweetalert::alert')
-
-        
 
     </body>
 </html>

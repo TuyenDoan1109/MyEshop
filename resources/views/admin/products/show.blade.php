@@ -7,15 +7,7 @@
         <h5>Product Detail Page</h5>
     </div><!-- sl-page-title -->
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @include('admin.layouts.response_message') 
 
     <div class="card pd-20 pd-sm-40">
         <div class="form-layout">
@@ -24,7 +16,7 @@
                         <div class="form-group">
                             <label>Product Name: <span class="tx-danger">*</span></label>
                             <br>
-                            <strong>{{$product->product_name}}</strong>
+                            <strong>{{$product->product_name}} - {{$product->product_size}}</strong>
                         </div>
                     </div>
                     <div class="col-lg-6">

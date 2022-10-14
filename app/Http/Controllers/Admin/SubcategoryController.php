@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Subcategory;
 use App\Category;
+use App\Product;
 
 
 class SubcategoryController extends Controller
@@ -34,7 +35,8 @@ class SubcategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('admin.subcategories.create', compact('categories'));
     }
 
     /**
@@ -54,7 +56,7 @@ class SubcategoryController extends Controller
         $subcategory->category_id = $request->input('category_id');
         $subcategory->save();
 
-        return redirect(route('subcategory.index'))->with('toast_success', 'Subcategory created successfully');
+        return redirect(route('subcategories.index'))->with('success', 'Subcategory created successfully');
     }
 
     /**
@@ -99,7 +101,7 @@ class SubcategoryController extends Controller
         $subcategory->category_id = request('category_id');
         $subcategory->save();
 
-        return redirect(route('subcategory.index'))->with('toast_success', 'Subcategory updated successfully');
+        return redirect(route('subcategories.index'))->with('success', 'Subcategory updated successfully');
     }
 
     /**
@@ -111,7 +113,12 @@ class SubcategoryController extends Controller
     public function destroy($id)
     {
         $subcategory = Subcategory::find($id);
-        $subcategory->delete();
-        return redirect(route('subcategory.index'))->with('toast_success', 'Subcategory removed successfully');
+        $products = Product::where('subcategory_id', $id)->get();
+        if(count($products) > 0) {
+            return redirect(route('subcategories.index'))->with('error', 'Removed products belong to this subcategory first');
+        } else {
+            $subcategory->delete();
+            return redirect(route('subcategories.index'))->with('success', 'Subcategory removed successfully');
+        }
     }
 }

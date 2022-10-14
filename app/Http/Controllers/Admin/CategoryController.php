@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Category;
-
-use RealRashid\SweetAlert\Facades\Alert;
+use App\Subcategory;
 
 
 class CategoryController extends Controller
@@ -34,7 +33,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
@@ -46,14 +45,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'category_name' => 'required|unique:categories|max:255'
+            'category_name' => 'required|string|unique:categories|max:255'
         ]);
 
         $category = new Category;
         $category->category_name = $request->input('category_name');
         $category->save();
 
-        return redirect(route('category.index'))->with('toast_success', 'Category created Successfully');
+        return redirect(route('categories.index'))->with('success', 'Category created Successfully');
     }
 
     /**
@@ -88,23 +87,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $this->validate($request, [
-        //     'category_name' => 'required|unique:categories|max:255'
-        // ]);
-
-        $validator = Validator::make($request->all(), [
-            'category_name' => 'required|unique:categories|min:2|max:255',
+        $this->validate($request, [
+            'category_name' => 'required|string|unique:categories|max:255'
         ]);
-    
-        if ($validator->fails()) {
-        return back()->with('toast_error', $validator->messages()->all()[0])->withInput();
-        }
 
         $category = Category::find($id);
         $category->category_name = $request->input('category_name');
         $category->save();
 
-        return redirect(route('category.index'))->with('toast_success', 'Category updated successfully');
+        return redirect(route('categories.index'))->with('success', 'Category updated successfully');
     }
 
     /**
@@ -116,10 +107,14 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
-        // Alert::question('Question Title', 'Question Message');
-        alert()->question('Title','Lorem Lorem Lorem');
-
-        $category->delete();
-        return redirect(route('category.index'))->with('toast_success', 'Category removed successfully');
+        
+        $subcategories = Subcategory::where('category_id', $id)->get();
+        if(count($subcategories) > 0) {
+            return redirect(route('categories.index'))->with('error', 'Removed subcategories belong to this category first');
+        } else {
+            $category->delete();
+            return redirect(route('categories.index'))->with('success', 'Category removed successfully');
+        }
+        
     }
 }

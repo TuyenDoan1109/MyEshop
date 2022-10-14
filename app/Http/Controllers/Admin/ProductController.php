@@ -47,7 +47,7 @@ class ProductController extends Controller
         foreach($subcategories as $subcategory) {
             $html .= '<option value="'. $subcategory->id .'">' . $subcategory->subcategory_name . '</option>';
         }
-        return $html;
+        return $html; 
     }
 
     /**
@@ -59,8 +59,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'product_name' => 'required',
-            'product_code' => 'required',
+            'product_name' => 'required|unique:products',
+            'product_code' => 'required|unique:products',
             'selling_price' => 'required|integer',
             'discount_price' => 'required|integer',
             'product_quantity' => 'required|integer',
@@ -70,9 +70,9 @@ class ProductController extends Controller
             'product_size' => 'required',
             'product_color' => 'required',
             'video_link' => 'required',
-            'image_1' => 'image|nullable|max:1999',
-            'image_2' => 'image|nullable|max:1999',
-            'image_3' => 'image|nullable|max:1999',
+            'image_1' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1999',
+            'image_2' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1999',
+            'image_3' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1999',
             'product_detail' => 'required',
         ]);
 
@@ -171,7 +171,7 @@ class ProductController extends Controller
 
         $product->save();
 
-        return redirect(route('product.index'))->with('toast_success', 'Product created');
+        return redirect(route('products.index'))->with('success', 'Product created');
     }
 
     /**
@@ -214,7 +214,6 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
-
         $this->validate($request, [
             'product_name' => 'required',
             'product_code' => 'required',
@@ -227,10 +226,10 @@ class ProductController extends Controller
             'product_size' => 'required',
             'product_color' => 'required',
             'video_link' => 'required',
-            'image_1' => 'image|nullable|max:1999',
-            'image_2' => 'image|nullable|max:1999',
-            'image_3' => 'image|nullable|max:1999',
-            'product_detail' => 'required',
+            'image_1' => 'nullable|image|max:1999',
+            'image_2' => 'nullable|image|max:1999',
+            'image_3' => 'nullable|image|max:1999',
+            'product_detail' => 'required'
         ]);
 
         // Handle File Upload
@@ -286,6 +285,7 @@ class ProductController extends Controller
         $product->product_size = $request->input('product_size');
         $product->product_color = $request->input('product_color');
         $product->video_link = $request->input('video_link');
+
         if($request->hasFile('image_1')) {
             $product->image_1 = $filenameToStore1;
         }
@@ -332,10 +332,9 @@ class ProductController extends Controller
         } else {
             $product->hot_new = 0;
         }
-
         $product->save();
 
-        return redirect(route('product.index'))->with('toast_success', 'Product updated');
+        return redirect(route('products.index'))->with('success', 'Product updated');
     }
 
     /**
@@ -361,20 +360,20 @@ class ProductController extends Controller
         }
 
         $product->delete();
-        return redirect(route('product.index'))->with('toast_success', 'Product removed');
+        return redirect(route('products.index'))->with('success', 'Product removed');
     }
 
     public function active($id) {
         $product = Product::find($id);
         $product->status = 1;
         $product->save();
-        return redirect(route('product.index'))->with('toast_success', 'Product actived');
+        return redirect(route('products.index'))->with('success', 'Product actived');
     }
 
     public function inactive($id) {
         $product = Product::find($id);
         $product->status = 0;
         $product->save();
-        return redirect(route('product.index'))->with('toast_success', 'Product inactived');
+        return redirect(route('products.index'))->with('success', 'Product inactived');
     }
 }

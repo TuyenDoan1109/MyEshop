@@ -1,0 +1,178 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use App\Product;
+
+class ProductSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('products')->insert([
+            [
+                'category_id' => 1,
+                'subcategory_id' => 1,
+                'brand_id' => 1,
+                'product_name' => 'Iphone 14',
+                'product_code' => '1111',
+                'product_quantity' => '50',
+                'product_size' => '4G/64G',
+                'product_color' => 'white,black,yellow',
+                'selling_price' => '18000000',
+                'discount_price' => '10000000',
+                'product_detail' => '<p>Tất cả iPhone ch&iacute;nh h&atilde;ng VN/A được ph&acirc;n phối tại Ho&agrave;ng H&agrave; Mobile đều được nhập trực tiếp từ C&ocirc;ng ty TNHH Apple Việt Nam.&nbsp;HoangHa Mobile l&agrave; nh&agrave; b&aacute;n lẻ ủy quyền ch&iacute;nh thức của Apple tại Việt Nam.</p>',
+                'image_1' => '2222.png',
+                'image_2' => 'anh-chup-man-hinh-2022-09-08-luc-01-57-13-removebg-preview.png',
+                'image_3' => 'anh-chup-man-hinh-2022-09-08-luc-01-59-53-removebg-preview.png',
+                'video_link' => 'https://www.youtube.com/watch?v=Zii2V9zk0oM',
+                'main_slider' => 1,
+                'hot_deal' => 1,
+                'best_rated' => 1,
+                'mid_slider' => 1,
+                'hot_new' => 1,
+                'trend' => 1,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'category_id' => 1,
+                'subcategory_id' => 1,
+                'brand_id' => 1,
+                'product_name' => 'Iphone 14',
+                'product_code' => '2222',
+                'product_quantity' => '50',
+                'product_size' => '6G/128G',
+                'product_color' => 'white,black,yellow',
+                'selling_price' => '28000000',
+                'discount_price' => '20000000',
+                'product_detail' => '<p>Tất cả iPhone ch&iacute;nh h&atilde;ng VN/A được ph&acirc;n phối tại Ho&agrave;ng H&agrave; Mobile đều được nhập trực tiếp từ C&ocirc;ng ty TNHH Apple Việt Nam.&nbsp;HoangHa Mobile l&agrave; nh&agrave; b&aacute;n lẻ ủy quyền ch&iacute;nh thức của Apple tại Việt Nam.</p>',
+                'image_1' => '2222.png',
+                'image_2' => 'anh-chup-man-hinh-2022-09-08-luc-01-57-13-removebg-preview.png',
+                'image_3' => 'anh-chup-man-hinh-2022-09-08-luc-01-59-53-removebg-preview.png',
+                'video_link' => 'https://www.youtube.com/watch?v=Zii2V9zk0oM',
+                'main_slider' => 1,
+                'hot_deal' => 1,
+                'best_rated' => 1,
+                'mid_slider' => 1,
+                'hot_new' => 1,
+                'trend' => 1,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'category_id' => 1,
+                'subcategory_id' => 1,
+                'brand_id' => 1,
+                'product_name' => 'Iphone 14',
+                'product_code' => '3333',
+                'product_quantity' => '50',
+                'product_size' => '6G/256G',
+                'product_color' => 'white,black,yellow',
+                'selling_price' => '38000000',
+                'discount_price' => '30000000',
+                'product_detail' => '<p>Tất cả iPhone ch&iacute;nh h&atilde;ng VN/A được ph&acirc;n phối tại Ho&agrave;ng H&agrave; Mobile đều được nhập trực tiếp từ C&ocirc;ng ty TNHH Apple Việt Nam.&nbsp;HoangHa Mobile l&agrave; nh&agrave; b&aacute;n lẻ ủy quyền ch&iacute;nh thức của Apple tại Việt Nam.</p>',
+                'image_1' => '2222.png',
+                'image_2' => 'anh-chup-man-hinh-2022-09-08-luc-01-57-13-removebg-preview.png',
+                'image_3' => 'anh-chup-man-hinh-2022-09-08-luc-01-59-53-removebg-preview.png',
+                'video_link' => 'https://www.youtube.com/watch?v=Zii2V9zk0oM',
+                'main_slider' => 1,
+                'hot_deal' => 1,
+                'best_rated' => 1,
+                'mid_slider' => 1,
+                'hot_new' => 1,
+                'trend' => 1,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'category_id' => 1,
+                'subcategory_id' => 2,
+                'brand_id' => 2,
+                'product_name' => 'Galaxy S22',
+                'product_code' => '4444',
+                'product_quantity' => '50',
+                'product_size' => '6G/256G',
+                'product_color' => 'white,black,yellow',
+                'selling_price' => '35000000',
+                'discount_price' => '32000000',
+                'product_detail' => '<p>Tất cả iPhone ch&iacute;nh h&atilde;ng VN/A được ph&acirc;n phối tại Ho&agrave;ng H&agrave; Mobile đều được nhập trực tiếp từ C&ocirc;ng ty TNHH Apple Việt Nam.&nbsp;HoangHa Mobile l&agrave; nh&agrave; b&aacute;n lẻ ủy quyền ch&iacute;nh thức của Apple tại Việt Nam.</p>',
+                'image_1' => 's22-1.png',
+                'image_2' => 'anh-chup-man-hinh-2022-09-08-luc-01-57-13-removebg-preview.png',
+                'image_3' => 'anh-chup-man-hinh-2022-09-08-luc-01-59-53-removebg-preview.png',
+                'video_link' => 'https://www.youtube.com/watch?v=Zii2V9zk0oM',
+                'main_slider' => 1,
+                'hot_deal' => 1,
+                'best_rated' => 1,
+                'mid_slider' => 1,
+                'hot_new' => 1,
+                'trend' => 1,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'category_id' => 1,
+                'subcategory_id' => 2,
+                'brand_id' => 2,
+                'product_name' => 'Galaxy S22',
+                'product_code' => '5555',
+                'product_quantity' => '50',
+                'product_size' => '6G/256G',
+                'product_color' => 'white,black,yellow',
+                'selling_price' => '35000000',
+                'discount_price' => '32000000',
+                'product_detail' => '<p>Tất cả iPhone ch&iacute;nh h&atilde;ng VN/A được ph&acirc;n phối tại Ho&agrave;ng H&agrave; Mobile đều được nhập trực tiếp từ C&ocirc;ng ty TNHH Apple Việt Nam.&nbsp;HoangHa Mobile l&agrave; nh&agrave; b&aacute;n lẻ ủy quyền ch&iacute;nh thức của Apple tại Việt Nam.</p>',
+                'image_1' => 's22-2.png',
+                'image_2' => 'anh-chup-man-hinh-2022-09-08-luc-01-57-13-removebg-preview.png',
+                'image_3' => 'anh-chup-man-hinh-2022-09-08-luc-01-59-53-removebg-preview.png',
+                'video_link' => 'https://www.youtube.com/watch?v=Zii2V9zk0oM',
+                'main_slider' => 1,
+                'hot_deal' => 1,
+                'best_rated' => 1,
+                'mid_slider' => 1,
+                'hot_new' => 1,
+                'trend' => 1,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'category_id' => 1,
+                'subcategory_id' => 2,
+                'brand_id' => 2,
+                'product_name' => 'Galaxy S22',
+                'product_code' => '6666',
+                'product_quantity' => '50',
+                'product_size' => '6G/256G',
+                'product_color' => 'white,black,yellow',
+                'selling_price' => '35000000',
+                'discount_price' => '32000000',
+                'product_detail' => '<p>Tất cả iPhone ch&iacute;nh h&atilde;ng VN/A được ph&acirc;n phối tại Ho&agrave;ng H&agrave; Mobile đều được nhập trực tiếp từ C&ocirc;ng ty TNHH Apple Việt Nam.&nbsp;HoangHa Mobile l&agrave; nh&agrave; b&aacute;n lẻ ủy quyền ch&iacute;nh thức của Apple tại Việt Nam.</p>',
+                'image_1' => 's22-3.png',
+                'image_2' => 'anh-chup-man-hinh-2022-09-08-luc-01-57-13-removebg-preview.png',
+                'image_3' => 'anh-chup-man-hinh-2022-09-08-luc-01-59-53-removebg-preview.png',
+                'video_link' => 'https://www.youtube.com/watch?v=Zii2V9zk0oM',
+                'main_slider' => 1,
+                'hot_deal' => 1,
+                'best_rated' => 1,
+                'mid_slider' => 1,
+                'hot_new' => 1,
+                'trend' => 1,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            
+
+        ]);
+
+        // factory(Product::class, 30)->create();
+    }
+}

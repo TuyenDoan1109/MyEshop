@@ -7,19 +7,11 @@
         <h5>Edit Product Form</h5>
     </div><!-- sl-page-title -->
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @include('admin.layouts.response_message') 
 
     <div class="card pd-20 pd-sm-40">
         <div class="form-layout">
-            <form action="{{route('product.update', $product->id)}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('products.update', $product->id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -233,7 +225,7 @@
         $('#category').change(function() {
             let category_id = $(this).val();
             $.ajax({
-                url:'/admin/product/getSubcategory',
+                url:'/admin/products/getSubcategory',
                 type:'post',
                 data:'category_id=' + category_id + '&_token={{csrf_token()}}',
                 success:function(result) {

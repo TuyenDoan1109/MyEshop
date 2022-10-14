@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+@include('layouts.breadcrumb')
+
     <!-- Product Detail Start -->
     <div class="container-fluid pb-5">
         <div class="row px-xl-5">
@@ -28,53 +31,50 @@
 
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
-                    <form action="{{route('cart.add')}}" method="post">
-                        @csrf
-                        <h3>{{$product->product_name}}</h3>
-                        <div class="d-flex mb-3">
-                            <div class="text-primary mr-2">
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star-half-alt"></small>
-                                <small class="far fa-star"></small>
-                            </div>
-                            <small class="pt-1">(99 Reviews)</small>
+                    <h3>{{$product->product_name}} - {{$product->product_size}}</h3>
+                    <div class="d-flex mb-3">
+                        <div class="text-primary mr-2">
+                            <small class="fas fa-star"></small>
+                            <small class="fas fa-star"></small>
+                            <small class="fas fa-star"></small>
+                            <small class="fas fa-star-half-alt"></small>
+                            <small class="far fa-star"></small>
                         </div>
-                        <div class="d-flex align-items-start">
-                            <h3 class="font-weight-semi-bold mb-4">{{number_format($product->discount_price)}} VNĐ</h3>
-                            <h6 class="text-muted ml-4 mt-2"><del>{{number_format($product->selling_price)}} VNĐ </del></h6>
-                        </div>
-                        <p class="mb-4">Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit
-                            clita ea. Sanc ipsum et, labore clita lorem magna duo dolor no sea
-                            Nonumy</p>
-                        <div class="d-flex mb-3">
-                            <strong class="text-dark mr-3">Sizes:</strong>
-                            <select name="product_size" id="" class="mr-3">
-                                @foreach($product_sizes as $product_size)
-                                    <option value="{{$product_size}}" class="custom-control custom-radio custom-control-inline">{{$product_size}}</option>
-                                @endforeach
-                            </select>
+                        <small class="pt-1">(99 Reviews)</small>
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <h3 class="font-weight-semi-bold mb-4">{{number_format($product->discount_price)}} VNĐ</h3>
+                        <h6 class="text-muted ml-4 mt-2"><del>{{number_format($product->selling_price)}} VNĐ </del></h6>
+                    </div>
+                    <p class="mb-4">Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit
+                        clita ea. Sanc ipsum et, labore clita lorem magna duo dolor no sea
+                        Nonumy</p>
+                    <div class="d-flex mb-3">
+                        <strong class="text-dark mr-3">Sizes:</strong>
+                        <select name="product_size" id="" class="mr-3">
+                            @foreach($product_sizes as $product_size)
+                                <option value="{{$product_size}}" class="custom-control custom-radio custom-control-inline">{{$product_size}}</option>
+                            @endforeach
+                        </select>
 
-                            <strong class="text-dark mr-3">Colors:</strong>
-                            <select name="product_color" id="">
-                                @foreach($product_colors as $product_color)
-                                    <option value="{{$product_color}}" class="custom-control custom-radio custom-control-inline">{{$product_color}}</option>
-                                @endforeach
-                            </select>
+                        <strong class="text-dark mr-3">Colors:</strong>
+                        <select name="product_color" id="color">
+                            @foreach($product_colors as $product_color)
+                                <option value="{{$product_color}}" class="custom-control custom-radio custom-control-inline">{{$product_color}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <strong class="text-dark mr-3">Quantity: </strong>
+                        <div class="input-group quantity mr-3" style="width: 100px;">
+                            <input id="qty" name="qty" type="number" class="form-control bg-secondary border-0 text-center" value="1">
                         </div>
-                        <div class="d-flex mb-3">
-                            <strong class="text-dark mr-3">Quantity: </strong>
-                            <div class="input-group quantity mr-3" style="width: 100px;">
-                                <input name="qty" type="number" class="form-control bg-secondary border-0 text-center" value="1">
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-4 pt-2">
-                            <input type="hidden" name="product_id" value="{{$product->id}}">
-                            <button class="btn btn-primary px-3 mr-2 addWishlist" data-id={{$product->id}}><i class="fas fa-heart mr-1"></i> Add To Whistlist</button>
-                            <button type="submit" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
-                        </div>
-                    </form>
+                    </div>
+                    <div class="d-flex align-items-center mb-4 pt-2">
+                        <input type="hidden" name="product_id" value="{{$product->id}}">
+                        <button class="btn btn-primary px-3 mr-2 addWishlist" data-id={{$product->id}}><i class="fas fa-heart mr-1"></i> Add To Whistlist</button>
+                        <button class="btn btn-primary px-3 addToCart" data-id={{$product->id}}><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                    </div>
                     
                     <div class="d-flex pt-2">
                         <strong class="text-dark mr-2">Share on:</strong>

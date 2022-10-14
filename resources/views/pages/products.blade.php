@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+    @include('layouts.breadcrumb')
+    
     <!-- Shop Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
@@ -155,7 +158,7 @@
                     @foreach($products as $product)
                     <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
-                            <div class="product-img position-relative overflow-hidden">
+                            <div style="height: 300px" class="product-img position-relative overflow-hidden">
                                 <img width="100px" height="100px" class="img-fluid w-100" src="{{asset('storage/backend/img/' . $product->image_1)}}" alt="">
                                 <div class="product-action">
                                     <a data-id="{{ $product->id }}" class="btn btn-outline-dark btn-square addWishlist"><i class="far fa-heart"></i></a>
@@ -164,7 +167,7 @@
                                 </div>
                             </div>
                             <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate" href="/product/{{$product->id}}">{{$product->product_name}}</a>
+                                <a class="h6 text-decoration-none text-truncate" href="/product/{{$product->id}}">{{$product->product_name}} - {{$product->product_size}}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     <h5>{{number_format($product->discount_price)}} VNĐ</h5><h6 class="text-muted ml-2"><del>{{number_format($product->selling_price)}} VNĐ</del></h6>
                                 </div>
