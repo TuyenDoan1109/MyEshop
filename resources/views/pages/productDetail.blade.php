@@ -5,7 +5,7 @@
 @include('layouts.breadcrumb')
 
     <!-- Product Detail Start -->
-    <div class="container-fluid pb-5">
+    <div class="container-fluid pb-5 product-item-ajax" data-id={{$product->id}}>
         <div class="row px-xl-5">
             <div class="col-lg-5 mb-30">
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
@@ -31,7 +31,7 @@
 
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
-                    <h3>{{$product->product_name}} - {{$product->product_size}}</h3>
+                    <h3>{{$product->product_name}} - {{$product->product_size}} - {{$product->product_color}}</h3>
                     <div class="d-flex mb-3">
                         <div class="text-primary mr-2">
                             <small class="fas fa-star"></small>
@@ -72,8 +72,8 @@
                     </div>
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <input type="hidden" name="product_id" value="{{$product->id}}">
-                        <button class="btn btn-primary px-3 mr-2 addWishlist" data-id={{$product->id}}><i class="fas fa-heart mr-1"></i> Add To Whistlist</button>
-                        <button class="btn btn-primary px-3 addToCart" data-id={{$product->id}}><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                        <button class="btn btn-primary px-3 mr-2 addWishlist"><i class="fas fa-heart mr-1"></i> Add To Whistlist</button>
+                        <button class="btn btn-primary px-3 addToCart"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
                     </div>
                     
                     <div class="d-flex pt-2">

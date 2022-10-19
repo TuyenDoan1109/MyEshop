@@ -8,17 +8,24 @@ use App\Category;
 use App\Subcategory;
 use App\Product;
 use Cart;
+use App\Wishlist;
+use Auth;
+
+
+
+
 
 class CartController extends Controller
 {
     public function addToCart(Request $request) {
         $id = $request->product_id;
-        $color = $request->product_color;
-        $qty = $request->product_qty;
+
+        $qty = $request->product_qty ?? 1;
         $product = Product::find($id); 
+        $color = $request->product_color ?? $product->product_color;
         $data = array();
         $data['id'] = $id;
-        $data['name'] = $product->product_name . ' - ' . $product->product_size;
+        $data['name'] = $product->product_name . ' - ' . $product->product_size . ' - ' . $product->product_color;
         $data['qty'] = $qty;
         $data['price'] = $product->discount_price;
         $data['weight'] = 1;
@@ -26,9 +33,22 @@ class CartController extends Controller
         $data['options']['size'] = $product->product_size;
         $data['options']['color'] = $color;
         Cart::add($data);
+
+        $currentURL = url()->current();
+        $wishlist_count = 0;
+        if(Auth::Check() && strpos($currentURL, 'wishlist') >= 0) {
+            $user_id = Auth::id();
+            $wishlist_item = Wishlist::where('user_id', $user_id)->where('product_id', $id)->first();
+            if($wishlist_item){
+                $wishlist_item->delete();
+            }
+            $wishlist_count = Wishlist::where('user_id', $user_id)->count();
+        }
+        
         return response()->json([
             'success' => 'Product added successfully',
-            'cartCount' => Cart::count()
+            'cartCount' => Cart::count(), 
+            'wishlist_count' => $wishlist_count
         ]);
     }
 
@@ -38,11 +58,17 @@ class CartController extends Controller
         $subcategories = Subcategory::all();
         $contents = Cart::content();
         $shipping_fee = 20000;
-        return view('pages.showCart', compact('categories', 'brands', 'subcategories', 'contents', 'shipping_fee'));
+        $wishlist_count = 0;
+        $currentURL = url()->current();
+        if(Auth::check()) {
+            $user_id = Auth::user()->id;
+            $wishlist_count = Wishlist::where('user_id', $user_id)->count();
+        }
+        return view('pages.showCart', compact('categories', 'brands', 'subcategories', 'contents', 'shipping_fee', 'wishlist_count', 'currentURL'));
     }
 
-    public function removeCartItem(Request $request, $id) {
-        Cart::remove($id);
+    public function removeCartItem(Request $request, $rowId) {
+        Cart::remove($rowId);
         return response()->json([
             'cartCount' => Cart::count(), 
             'success' => 'Product removed successfully',

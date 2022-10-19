@@ -1,6 +1,5 @@
 <?php
 
-// use RealRashid\SweetAlert\Facades\Alert;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -59,7 +58,7 @@ Route::get('/', 'PageController@index');
 
 // Products
 Route::get('/products', 'PageController@showProducts');
-Route::get('/product/{id}', 'PageController@showProductDetail');
+Route::get('/product/{product_id}', 'PageController@showProductDetail')->name('product.detail');
 Route::get('/product-by-subcategory/{subcategory_id}', 'PageController@showProductBySubcategory');
 Route::get('/product-by-category/{category_id}', 'PageController@showProductByCategory');
 
@@ -68,7 +67,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Wishlist
 Route::get('/wishlist/add/{product_id}', 'WishlistController@addWishlist')->name('wishlist.add');
-Route::get('/wishlist/show/{user_id}', 'WishlistController@showWishlist')->name('wishlist.show');
+Route::get('/wishlist/index', 'WishlistController@indexWishlist')->middleware('auth')->name('wishlist.index');
+Route::delete('/wishlist/remove/{product_id}', 'WishlistController@removeWishlist')->name('wishlist.remove');
+// Route::post('/wishlist/addToCart', 'WishlistController@addWishlistToCart')->name('wishlist.addToCart');
+
 
 // Contact
 Route::get('/contact', 'PageController@showContact')->name('contact');
@@ -76,7 +78,7 @@ Route::get('/contact', 'PageController@showContact')->name('contact');
 // Cart
 Route::post('/cart/add', 'CartController@addToCart')->name('cart.add');
 Route::get('/cart/index', 'CartController@showCart')->name('cart.index');
-Route::delete('/cart/remove/{id}', 'CartController@removeCartItem')->name('cart.remove');
+Route::delete('/cart/remove/{rowId}', 'CartController@removeCartItem')->name('cart.remove');
 Route::patch('/cart/update', 'CartController@updateCart')->name('cart.update'); 
 
 // Checkout

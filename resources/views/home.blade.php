@@ -73,18 +73,19 @@
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Featured Products</span></h2>
         <div class="row px-xl-5">
             @foreach($featured_products as $featured_product)
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product-item-ajax" data-id="{{$featured_product->id}}">
                     <div class="product-item bg-light mb-4">
                         <div style="height: 300px" class="product-img position-relative overflow-hidden">
                             <img class="img-fluid w-100" src="{{asset('storage/backend/img/' . $featured_product->image_1)}}" alt="">
                             <div class="product-action">
-                                <a data-id="{{$featured_product->id}}" class="btn btn-outline-dark btn-square addWishlist" href=""><i class="far fa-heart"></i></a>
+                                <a class="btn btn-outline-dark btn-square addWishlist"><i class="fa fa-heart"></i></a>
+                                <a class="btn btn-outline-dark btn-square addToCart"><i class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
                             </div>
                         </div>
                         <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$featured_product->id}}">{{$featured_product->product_name}} - {{$featured_product->product_size}}</a>
+                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$featured_product->id}}">{{$featured_product->product_name}} - {{$featured_product->product_size}} - {{$featured_product->product_color}}</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
                                 <h5>{{number_format($featured_product->discount_price)}} VNĐ</h5><h6 class="text-muted ml-2"><del>{{number_format($featured_product->selling_price)}} VNĐ</del></h6>
                             </div>
@@ -109,18 +110,19 @@
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Hot Deal Products</span></h2>
         <div class="row px-xl-5">
             @foreach($hotdeal_products as $hotdeal_product)
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product-item-ajax" data-id="{{$hotdeal_product->id}}">
                     <div class="product-item bg-light mb-4">
                         <div style="height: 300px" class="product-img position-relative overflow-hidden">
                             <img class="img-fluid w-100" src="{{asset('storage/backend/img/' . $hotdeal_product->image_1)}}" alt="">
                             <div class="product-action">
-                                <a data-id="{{$hotdeal_product->id}}" class="btn btn-outline-dark btn-square addWishlist" href=""><i class="far fa-heart"></i></a>
+                                <a data-id="{{$hotdeal_product->id}}" class="btn btn-outline-dark btn-square addWishlist"><i class="fa fa-heart"></i></a>
+                                <a data-id="{{$hotdeal_product->id}}" class="btn btn-outline-dark btn-square addToCart"><i class="fa fa-shopping-cart"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
                             </div>
                         </div>
                         <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$hotdeal_product->id}}">{{$hotdeal_product->product_name}} - {{$hotdeal_product->product_size}}</a>
+                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$hotdeal_product->id}}">{{$hotdeal_product->product_name}} - {{$hotdeal_product->product_size}} - {{$hotdeal_product->product_color}}</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
                                 <h5>{{number_format($hotdeal_product->discount_price)}} VNĐ</h5><h6 class="text-muted ml-2"><del>{{number_format($hotdeal_product->discount_price)}} VNĐ</del></h6>
                             </div>

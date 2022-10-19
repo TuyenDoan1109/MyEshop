@@ -67,7 +67,7 @@
                                     @csrf
                                 </form>
 
-                                <a class="dropdown-item" href="{{route('wishlist.show', Auth::user()->id)}}">Wishlist</a>
+                                <a class="dropdown-item" href="{{route('wishlist.index', Auth::user()->id)}}">Wishlist</a>
                             </div>
                         @endguest
                         
@@ -155,22 +155,45 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="/" class="nav-item nav-link active">Home</a>
-                            <a href="/products" class="nav-item nav-link">All Products</a>
+                            <a href="/" class="nav-item nav-link
+                            @if($currentURL == 'http://myeshop.test')
+                                active
+                            @endif
+                            ">Home</a>
+
+                            <a href="/products" class="nav-item nav-link 
+                            @if($currentURL == 'http://myeshop.test/products')
+                                active
+                            @endif
+                            ">All Products</a>
+
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                    <a href="{{route('cart.index')}}" class="dropdown-item">Shopping Cart</a>
-                                    <a href="{{route('checkout')}}" class="dropdown-item">Checkout</a>
+                                    <a href="{{route('cart.index')}}" class="dropdown-item 
+                                    @if($currentURL == 'http://myeshop.test/cart/index')
+                                        active
+                                    @endif
+                                    ">Shopping Cart</a>
+
+                                    <a href="{{route('checkout')}}" class="dropdown-item
+                                    @if($currentURL == 'http://myeshop.test/checkout')
+                                        active
+                                    @endif
+                                    ">Checkout</a>
                                 </div>
                             </div>
-                            <a href="{{route('contact')}}" class="nav-item nav-link">Contact</a>
+                            <a href="{{route('contact')}}" class="nav-item nav-link
+                            @if($currentURL == 'http://myeshop.test/contact')
+                                active
+                            @endif
+                            ">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                             @auth
-                                <a href="{{route('wishlist.show', Auth::user()->id)}}" class="btn px-0 ml-2">
+                                <a href="{{route('wishlist.index')}}" class="btn px-0 ml-2">
                                     <i class="fas fa-heart text-primary"></i>
-                                    <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                                    <span id="wishlist-count" class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">{{$wishlist_count}}</span>
                                 </a>
                             @endauth
                             <a href="{{route('cart.index')}}" class="btn px-0 ml-3">
@@ -272,20 +295,24 @@
     <script src="{{asset('frontend/mail/contact.js')}}"></script>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    {{-- <script src="sweetalert2.all.min.js"></script> --}}
 
     
     <script type="text/javascript">
         $(document).ready(function() {
+
             // Add to Wishlist Ajax 
             $('.addWishlist').on('click', function(event) {
                 event.preventDefault();
-                var id = $(this).data('id');
+                var id = $(this).closest('.product-item-ajax').data("id");
+                // alert(id);
                 $.ajax({
-                    url: "/wishlist/add/"+id,
-                    type:"GET",
-                    datType:"json",
+                    url: "/wishlist/add/" + id,
+                    type: "GET",
+                    datType: "json",
                     success: function(data) {
+                        var wishlistCountElement = $('#wishlist-count');
+                        var wishlist_count = data['wishlist_count'];
+                        wishlistCountElement.html(wishlist_count);
                         const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -316,13 +343,14 @@
             // Add to Cart Ajax 
             $('.addToCart').on('click', function(event) {
                 event.preventDefault();
+                var ele = $(this);
                 $.ajax({
                     url: "/cart/add",
-                    type:"POST",
-                    datType:"json",
+                    type: "POST",
+                    datType: "json",
                     data: {
                         _token: '{{ csrf_token() }}',
-                        product_id: $(this).data('id'),
+                        product_id: ele.closest('.product-item-ajax').data("id"),
                         product_color: $('#color').find(":selected").val(),
                         product_qty: $('#qty').val()
                     },
@@ -330,6 +358,18 @@
                         var cartCountElement = $("#cart-count");
                         var cartCount = Number(data['cartCount']);
                         cartCountElement.html(cartCount);
+
+                        var wishlistElement = $('#wishlist');
+                        if(wishlistElement) {
+                            var itemToRemove = ele.parents("tr");
+                            itemToRemove.remove();
+                            var wishlistCountElement = $('#wishlist-count');
+                            var wishlist_count = data['wishlist_count'];
+                            wishlistCountElement.html(wishlist_count);
+                            if(wishlist_count == 0) {
+                                wishlistElement.html('<p class="text-center">Your wishlist is empty!</p >');
+                            }
+                        }
                         const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
@@ -355,7 +395,146 @@
                         }
                     }
                 });
-            });   
+            });  
+            
+            // Update Cart Quantity Ajax
+            $(".qty").change(function(e) {
+                e.preventDefault();
+                var ele = $(this);
+                $.ajax({
+                    url: '{{ route('cart.update') }}',
+                    method: "patch",
+                    data: {
+                        _token: '{{ csrf_token() }}', 
+                        rowId: ele.parents("tr").attr("data-id"), 
+                        qty: ele.parents("tr").find(".qty").val()
+                    },
+                    success: function(response) {
+                        var subtotalElement = ele.parents("tr").find(".total");
+                        var subtotal = response['result']['price'] * response['result']['qty'];
+                        var initialElement = $("#initial");
+                        var initial = Number(response['initial']);
+                        var taxElement = $("#tax");
+                        var tax = Number(response['tax']);
+                        var totalElement = $("#total");
+                        var total = Number(response['total']) + Number(response['shipping_fee']);
+                        var cartCountElement = $("#cart-count");
+                        var cartCount = Number(response['cartCount']);
+                        subtotalElement.html(subtotal.toLocaleString('en-US') + ' VNĐ');
+                        initialElement.html(initial.toLocaleString('en-US') + ' VNĐ');
+                        taxElement.html(tax.toLocaleString('en-US') + ' VNĐ');
+                        totalElement.html(total.toLocaleString('en-US') + ' VNĐ');
+                        cartCountElement.html(cartCount);
+                    } 
+                });
+            });
+
+            // Delete Cart Item Ajax
+            $(".removeCartItem").click(function(e) {
+                e.preventDefault();
+                var ele = $(this);
+                var rowId = ele.parents("tr").attr("data-id");
+                $.ajax({
+                    url: '/cart/remove/' + rowId,
+                    method: "delete",
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                        // rowId: ele.parents("tr").attr("data-id"), 
+                    },
+                    success: function(result) {
+                        var cartCount = Number(result['cartCount']);
+                        var cartCountElement = $("#cart-count");
+                        cartCountElement.html(cartCount);
+                        var itemToRemove = ele.parents("tr");
+                        itemToRemove.remove();
+                        var initialElement = $("#initial");
+                        var initial = Number(result['initial']);
+                        var taxElement = $("#tax");
+                        var tax = Number(result['tax']);
+                        var totalElement = $("#total");
+                        var total = Number(result['total']) + Number(result['shipping_fee']);
+                        initialElement.html(initial.toLocaleString('en-US') + ' VNĐ');
+                        taxElement.html(tax.toLocaleString('en-US') + ' VNĐ');
+                        totalElement.html(total.toLocaleString('en-US') + ' VNĐ');
+                        if(cartCount == 0) {
+                            var tableElement = $("#table");
+                            tableElement.html('<p class="text-center">Your cart is empty!</p >');
+                        }   
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            onOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                        if($.isEmptyObject(result.error)) {   
+                            Toast.fire({
+                            icon: 'success',
+                            title: result.success
+                            })
+                        } else {
+                            Toast.fire({
+                            icon: 'error',
+                            title: result.error
+                            })
+                        }
+                    }
+                });
+            });
+            
+            // Delete Product on Wishlist Ajax 
+            $('.delete-product-wishlist').on('click', function(event) {
+                var ele = $(this);
+                var id = ele.parents("tr").attr("data-id");
+
+                $.ajax({
+                    url: "/wishlist/remove/" + id,
+                    method: "delete",
+                    datType: "json",
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        var wishlistCountElement = $('#wishlist-count');
+                        var wishlist_count = data['wishlist_count'];
+                        wishlistCountElement.html(wishlist_count);
+                        var itemToRemove = ele.parents("tr");
+                        itemToRemove.remove();
+                        if(wishlist_count == 0) {
+                            var wishlistElement = $('#wishlist');
+                            wishlistElement.html('<p class="text-center">Your wishlist is empty!</p >');
+                        }
+                        const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        onOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                        });
+
+                        if($.isEmptyObject(data.error)) {   
+                            Toast.fire({
+                            icon: 'success',
+                            title: data.success
+                            })
+                        } else {
+                            Toast.fire({
+                            icon: 'error',
+                            title: data.error
+                            })
+                        }
+                    }
+                });
+            }); 
+
         });
     </script>
 

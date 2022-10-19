@@ -16,7 +16,7 @@
                         <div class="form-group">
                             <label>Product Name: <span class="tx-danger">*</span></label>
                             <br>
-                            <strong>{{$product->product_name}} - {{$product->product_size}}</strong>
+                            <strong>{{$product->product_name}} - {{$product->product_size}} - {{$product->product_color}}</strong>
                         </div>
                     </div>
                     <div class="col-lg-6">

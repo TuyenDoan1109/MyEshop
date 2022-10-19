@@ -12,31 +12,48 @@ use App\Subcategory;
 class WishlistController extends Controller
 {
     public function addWishlist($product_id) {
-        $user_id = Auth::id();
-
         if(Auth::Check()) {
-            $check = Wishlist::where('user_id', $user_id)->where('product_id', $product_id)->first();
-            if($check){
+            $user_id = Auth::id();
+
+            $checkExist = Wishlist::where('user_id', $user_id)->where('product_id', $product_id)->first();
+            if($checkExist) {
                 return \Response::json(['error' => 'Product Already have in Your Wishlist']);
             } else {
                 $wishlist = new Wishlist;
                 $wishlist->user_id = $user_id;
                 $wishlist->product_id = $product_id;
                 $wishlist->save();
-                return \Response::json(['success' => 'Product Added on wishlist']);
+                $wishlist_count = Wishlist::where('user_id', $user_id)->count();
+                return \Response::json([
+                    'success' => 'Product Added on wishlist',
+                    'wishlist_count' => $wishlist_count
+                ]);
             }
         } else {
             return \Response::json(['error' => 'Login Your Acount first!']);
         }
     }
 
-    public function showWishlist($user_id) {
+    public function indexWishlist() {
+        $user_id = Auth::id(); 
         $categories = Category::all();
         $brands = Brand::all();
         $subcategories = Subcategory::all();
-        $wishlists = Wishlist::where('user_id', $user_id)->get();
-        
-        return view('pages.showWishlist', compact('categories', 'brands', 'subcategories', 'wishlists'));
+        $wishlist_items = Wishlist::WishlistItems();
+        $wishlist_count = $wishlist_items->count();
+        $currentURL = url()->current();
+        return view('pages.indexWishlist', compact('categories', 'brands', 'subcategories', 'wishlist_items', 'wishlist_count', 'currentURL'));
+    }
+
+    public function removeWishlist(Request $request, $product_id) {
+        $user_id = Auth::id(); 
+        $wishlist_item = Wishlist::where('user_id', $user_id)->where('product_id', $product_id)->first();
+        $wishlist_item->delete();
+        $wishlist_count = Wishlist::where('user_id', $user_id)->count();
+        return \Response::json([
+            'success' => 'Product deleted successfully',
+            'wishlist_count' => $wishlist_count
+        ]);
     }
 
 }

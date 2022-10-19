@@ -34,7 +34,7 @@
                         @foreach($products as $key=>$product)
                         <tr>
                             <td>{{$product->product_code}}</td>
-                            <td>{{$product->product_name}} - {{$product->product_size}}</td>
+                            <td>{{$product->product_name}} - {{$product->product_size}} - {{$product->product_color}}</td>
                             <td>
                                 <img width="100px" height="100px" src="{{asset("storage/backend/img/$product->image_1")}}" alt="">
                             </td>

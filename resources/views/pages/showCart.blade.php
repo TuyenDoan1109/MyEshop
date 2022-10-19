@@ -25,7 +25,9 @@
                         @foreach($contents as $content)
                             <tr data-id="{{ $content->rowId }}">
                                 <td class="align-middle">
-                                    <img class="mr-2" src="{{asset('storage/backend/img/' . $content->options->image)}}" alt="" style="width: 50px;">{{$content->name}}
+                                    <a style="color: #6C757D; text-decoration: none;" href="{{route('product.detail', $content->id)}}">
+                                        <img class="mr-2" src="{{asset('storage/backend/img/' . $content->options->image)}}" alt="" style="width: 50px;">{{$content->name}}
+                                    </a>
                                 </td>
                                 <td class="align-middle price">{{number_format($content->price)}} VNĐ</td>
                                 <td class="align-middle">{{$content->options->color}}</td>
@@ -78,94 +80,4 @@
 </div>
 <!-- Cart End -->
 
-<script>
-    // Update Cart Quantity Ajax
-    $(".qty").change(function(e) {
-        e.preventDefault();
-        var ele = $(this);
-        $.ajax({
-            url: '{{ route('cart.update') }}',
-            method: "patch",
-            data: {
-                _token: '{{ csrf_token() }}', 
-                rowId: ele.parents("tr").attr("data-id"), 
-                qty: ele.parents("tr").find(".qty").val()
-            },
-            success: function(response) {
-                var subtotalElement = ele.parents("tr").find(".total");
-                var subtotal = response['result']['price'] * response['result']['qty'];
-                var initialElement = $("#initial");
-                var initial = Number(response['initial']);
-                var taxElement = $("#tax");
-                var tax = Number(response['tax']);
-                var totalElement = $("#total");
-                var total = Number(response['total']) + Number(response['shipping_fee']);
-                var cartCountElement = $("#cart-count");
-                var cartCount = Number(response['cartCount']);
-                subtotalElement.html(subtotal.toLocaleString('en-US') + ' VNĐ');
-                initialElement.html(initial.toLocaleString('en-US') + ' VNĐ');
-                taxElement.html(tax.toLocaleString('en-US') + ' VNĐ');
-                totalElement.html(total.toLocaleString('en-US') + ' VNĐ');
-                cartCountElement.html(cartCount);
-            } 
-        });
-    });
-
-    // Delete Cart Item Ajax
-    $(".removeCartItem").click(function(e) {
-        e.preventDefault();
-        var ele = $(this);
-        var rowId = ele.parents("tr").attr("data-id");
-        $.ajax({
-            url: '/cart/remove/' + rowId,
-            method: "delete",
-            data: {
-                _token: '{{ csrf_token() }}'
-                // rowId: ele.parents("tr").attr("data-id"), 
-            },
-            success: function(result) {
-                var cartCount = Number(result['cartCount']);
-                var cartCountElement = $("#cart-count");
-                cartCountElement.html(cartCount);
-                var itemToRemove = ele.parents("tr");
-                itemToRemove.remove();
-                var initialElement = $("#initial");
-                var initial = Number(result['initial']);
-                var taxElement = $("#tax");
-                var tax = Number(result['tax']);
-                var totalElement = $("#total");
-                var total = Number(result['total']) + Number(result['shipping_fee']);
-                initialElement.html(initial.toLocaleString('en-US') + ' VNĐ');
-                taxElement.html(tax.toLocaleString('en-US') + ' VNĐ');
-                totalElement.html(total.toLocaleString('en-US') + ' VNĐ');
-                if(cartCount == 0) {
-                    var tableElement = $("#table");
-                    tableElement.html('<p class="text-center">Your cart is empty!</p >');
-                }   
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    onOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                });
-                if($.isEmptyObject(result.error)) {   
-                    Toast.fire({
-                    icon: 'success',
-                    title: result.success
-                    })
-                } else {
-                    Toast.fire({
-                    icon: 'error',
-                    title: result.error
-                    })
-                }
-            }
-        });
-    });
-</script>
 @endsection

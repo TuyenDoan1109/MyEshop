@@ -155,19 +155,21 @@
                             </div>
                         </div>
                     </div>
+
                     @foreach($products as $product)
-                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1 product-item-ajax" data-id="{{$product->id}}">
                         <div class="product-item bg-light mb-4">
                             <div style="height: 300px" class="product-img position-relative overflow-hidden">
                                 <img width="100px" height="100px" class="img-fluid w-100" src="{{asset('storage/backend/img/' . $product->image_1)}}" alt="">
                                 <div class="product-action">
-                                    <a data-id="{{ $product->id }}" class="btn btn-outline-dark btn-square addWishlist"><i class="far fa-heart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square addWishlist"><i class="fa fa-heart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square addToCart"><i class="fa fa-shopping-cart"></i></a>
                                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
                                 </div>
                             </div>
                             <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate" href="/product/{{$product->id}}">{{$product->product_name}} - {{$product->product_size}}</a>
+                                <a class="h6 text-decoration-none text-truncate" href="/product/{{$product->id}}">{{$product->product_name}} - {{$product->product_size}} - {{$product->product_color}}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     <h5>{{number_format($product->discount_price)}} VNĐ</h5><h6 class="text-muted ml-2"><del>{{number_format($product->selling_price)}} VNĐ</del></h6>
                                 </div>
@@ -183,6 +185,7 @@
                         </div>
                     </div>
                     @endforeach
+
                     <div class="col-12">
                         <nav>
                           <ul class="pagination justify-content-center">

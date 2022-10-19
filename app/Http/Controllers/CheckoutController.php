@@ -14,6 +14,7 @@ use App\PaymentMethod;
 use App\Shipping;
 use App\OrderStatus;
 use Auth;
+use App\Wishlist;
 
 class CheckoutController extends Controller
 {
@@ -24,8 +25,14 @@ class CheckoutController extends Controller
         $shipping_fee = 20000;
         $contents = Cart::content();
         $payment_methods = PaymentMethod::where('status', '1')->get();
+        $wishlist_count = 0;
+        $currentURL = url()->current();
+        if(Auth::check()) {
+            $user_id = Auth::user()->id;
+            $wishlist_count = Wishlist::where('user_id', $user_id)->count();
+        }
         if(Cart::count() > 0) {
-            return view('pages.checkout', compact('categories', 'brands', 'subcategories', 'contents', 'shipping_fee', 'payment_methods'));
+            return view('pages.checkout', compact('categories', 'brands', 'subcategories', 'contents', 'shipping_fee', 'payment_methods', 'wishlist_count', 'currentURL'));
         } else {
             return Redirect()->back()->with('toast_error', 'Buy at least one item!');
         }
@@ -81,7 +88,13 @@ class CheckoutController extends Controller
                 $order_detail->save();
             }
             Cart::destroy();
-            return view('pages.succeedOrder', compact('categories', 'brands', 'subcategories'));
+            $wishlist_count = 0;
+            if(Auth::check()) {
+                $user_id = Auth::user()->id;
+                $wishlist_count = Wishlist::where('user_id', $user_id)->count();
+            }
+            $currentURL = url()->current();
+            return view('pages.succeedOrder', compact('categories', 'brands', 'subcategories', 'wishlist_count', 'currentURL'));
         } else {
             return redirect()->back()->with('error', 'Buy at least 1 product');
         }
