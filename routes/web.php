@@ -69,8 +69,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/wishlist/add/{product_id}', 'WishlistController@addWishlist')->name('wishlist.add');
 Route::get('/wishlist/index', 'WishlistController@indexWishlist')->middleware('auth')->name('wishlist.index');
 Route::delete('/wishlist/remove/{product_id}', 'WishlistController@removeWishlist')->name('wishlist.remove');
-// Route::post('/wishlist/addToCart', 'WishlistController@addWishlistToCart')->name('wishlist.addToCart');
-
 
 // Contact
 Route::get('/contact', 'PageController@showContact')->name('contact');

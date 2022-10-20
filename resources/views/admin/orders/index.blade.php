@@ -22,7 +22,8 @@
                         <th class="wd-15p">Quantity</th>
                         <th class="wd-15p">Order Total</th>
                         <th class="wd-15p">Payment Method</th>
-                        <th class="wd-15p">Order Address</th>
+                        <th class="wd-15p">Shipping Address</th>
+                        <th class="wd-15p">Shipping Note</th>
                         <th class="wd-15p">Order Date</th>
                         <th class="wd-15p">Status</th>
                         <th class="wd-20p">Action</th>
@@ -34,17 +35,16 @@
                         @foreach($orders as $key => $order)
                             <tr>
                                 <td>{{++$key}}</td>
-                                @if($order->user_id)
-                                    <td>{{$order->user_id}}</td>
-                                @else
-                                    <td>Guest</td>
-                                @endif
+                                
+                                <td>{{$order->shipping->shipping_name}}</td>
+                                
                                 <td>tuyen@gmail.com</td>
                                 <td>0985436371</td>
                                 <td>5</td>
                                 <td>{{$order->order_total}}</td>
                                 <td>{{$order->payment_method_id}}</td>
                                 <td>Cau giay</td>
+                                <td>Note</td>
                                 <td>{{$order->created_at}}</td>
                                 <td>{{$order->order_status_id}}</td>
                                 <td>view</td> 

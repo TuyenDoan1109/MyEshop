@@ -20,7 +20,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::orderItems();
         return view('admin.orders.index')->with('orders', $orders);
     }
 
