@@ -16,15 +16,16 @@
                 <thead>
                     <tr>
                         <th class="wd-15p">S/N</th>
-                        <th class="wd-15p">Admin Name</th>
-                        <th class="wd-15p">Admin Avatar</th>
-                        <th class="wd-15p">Admin Email</th>
-                        <th class="wd-15p">Admin Phone</th>
+                        <th class="wd-15p">Name</th>
+                        <th class="wd-15p">Avatar</th>
+                        <th class="wd-15p">Email</th>
+                        <th class="wd-15p">Phone</th>
+                        <th class="wd-15p">Address</th>
                         <th class="wd-20p">Action</th>
                     </tr>
                 </thead>
 
-                <tbody>                
+                <tbody>
                     @if(count($admins) > 0)
                         @foreach($admins as $key=>$admin)
                         <tr>
@@ -39,15 +40,14 @@
                             </td>
                             <td>{{$admin->email}}</td>
                             <td>{{$admin->phone}}</td>
-                            <td>
-                                <a href="{{route('admins.edit', $admin->id)}}" class="btn btn-sm btn-info">Edit</a>
-                                <a class="btn btn-sm btn-danger text-light" onclick="event.preventDefault();
-                                    document.getElementById('delete-admin-form-{{$admin->id}}').submit();">
-                                    Delete
-                                </a>
-                                <form id="delete-admin-form-{{$admin->id}}" action="{{ route('admins.destroy', $admin->id) }}" method="POST"   style="display: none;">
+                            <td>{{$admin->address}}</td>
+                            <td class="form-inline">
+                                <a href="{{route('admins.edit', $admin->id)}}" class="btn btn-sm btn-info form-control mr-1">Edit</a>
+                                <form action="{{ route('admins.destroy', $admin->id)}}" method="POST"
+                                    onsubmit="return confirm('Are you sure')">
                                     @csrf
                                     @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger text-light">Delete</button>
                                 </form>
                             </td>
                         </tr>

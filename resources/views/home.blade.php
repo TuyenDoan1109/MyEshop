@@ -44,10 +44,20 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- CONTROLS -->
+                <a href="#header-carousel" class="carousel-control-prev" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+
+                <a href="#header-carousel" class="carousel-control-next" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
             </div>
+
             <div class="col-lg-4">
                 <div class="product-offer mb-30" style="height: 200px;">
-                    <img class="img-fluid" src="{{asset('frontend/img/offer-1.jpg')}}" alt="">
+                    <img class="img-fluid" src="{{asset('frontend/img/offer-2.jpg')}}" alt="">
                     <div class="offer-text">
                         <h6 class="text-white text-uppercase">Save 20%</h6>
                         <h3 class="text-white mb-3">Special Offer</h3>
@@ -98,15 +108,15 @@
     </div>
     <!-- Featured End -->
 
-    <!-- Featured Products Start -->
+    <!-- Phones Start -->
     <div class="container-fluid pt-5 pb-3">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Featured Products</span></h2>
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Smartphones</span></h2>
         <div class="row px-xl-5">
-            @foreach($featured_products as $featured_product)
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product-item-ajax" data-id="{{$featured_product->id}}">
+            @foreach($phones as $phone)
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product-item-ajax" data-id="{{$phone->id}}">
                     <div class="product-item bg-light mb-4">
                         <div style="height: 300px" class="product-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="{{asset('storage/backend/img/' . $featured_product->image_1)}}" alt="">
+                            <img class="img-fluid w-100" src="{{asset('storage/backend/img/' . $phone->image_1)}}" alt="">
                             <div class="product-action">
                                 <a class="btn btn-outline-dark btn-square addWishlist"><i class="fa fa-heart"></i></a>
                                 <a class="btn btn-outline-dark btn-square addToCart"><i class="fa fa-shopping-cart"></i></a>
@@ -115,9 +125,16 @@
                             </div>
                         </div>
                         <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$featured_product->id}}">{{$featured_product->product_name}} - {{$featured_product->product_size}} - {{$featured_product->product_color}}</a>
+                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$phone->id}}">
+                                {{$phone->product_name}} -
+                                {{$phone->product_size}} -
+                                {{$phone->product_color}}
+                            </a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>{{number_format($featured_product->discount_price)}} VNĐ</h5><h6 class="text-muted ml-2"><del>{{number_format($featured_product->selling_price)}} VNĐ</del></h6>
+                                <h5>{{number_format($phone->discount_price)}} VNĐ</h5>
+                                <h6 class="text-muted ml-2">
+                                    <del>{{number_format($phone->selling_price)}} VNĐ</del>
+                                </h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
                                 <small class="fa fa-star text-primary mr-1"></small>
@@ -133,28 +150,39 @@
             @endforeach
         </div>
     </div>
-    <!-- Featured Products End -->
+    <!-- Phones End -->
 
-    <!-- Hot Deal Products Start -->
+    <!-- Laptops Start -->
     <div class="container-fluid pt-5 pb-3">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Hot Deal Products</span></h2>
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Laptops</span></h2>
         <div class="row px-xl-5">
-            @foreach($hotdeal_products as $hotdeal_product)
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product-item-ajax" data-id="{{$hotdeal_product->id}}">
+            @foreach($laptops as $laptop)
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product-item-ajax" data-id="{{$laptop->id}}">
                     <div class="product-item bg-light mb-4">
                         <div style="height: 300px" class="product-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="{{asset('storage/backend/img/' . $hotdeal_product->image_1)}}" alt="">
+                            <img class="img-fluid w-100" src="{{asset('storage/backend/img/' . $laptop->image_1)}}" alt="">
                             <div class="product-action">
-                                <a data-id="{{$hotdeal_product->id}}" class="btn btn-outline-dark btn-square addWishlist"><i class="fa fa-heart"></i></a>
-                                <a data-id="{{$hotdeal_product->id}}" class="btn btn-outline-dark btn-square addToCart"><i class="fa fa-shopping-cart"></i></a>
+                                <a data-id="{{$laptop->id}}" class="btn btn-outline-dark btn-square addWishlist">
+                                    <i class="fa fa-heart"></i>
+                                </a>
+                                <a data-id="{{$laptop->id}}" class="btn btn-outline-dark btn-square addToCart">
+                                    <i class="fa fa-shopping-cart"></i>
+                                </a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
                             </div>
                         </div>
                         <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$hotdeal_product->id}}">{{$hotdeal_product->product_name}} - {{$hotdeal_product->product_size}} - {{$hotdeal_product->product_color}}</a>
+                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$laptop->id}}">
+                                {{$laptop->product_name}} -
+                                {{$laptop->product_size}} -
+                                {{$laptop->product_color}}
+                            </a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>{{number_format($hotdeal_product->discount_price)}} VNĐ</h5><h6 class="text-muted ml-2"><del>{{number_format($hotdeal_product->discount_price)}} VNĐ</del></h6>
+                                <h5>{{number_format($laptop->discount_price)}} VNĐ</h5>
+                                <h6 class="text-muted ml-2">
+                                    <del>{{number_format($laptop->discount_price)}} VNĐ</del>
+                                </h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
                                 <small class="fa fa-star text-primary mr-1"></small>
@@ -170,35 +198,83 @@
             @endforeach
         </div>
     </div>
-    <!-- Hot Deal Products End -->
+    <!-- Laptops End -->
+
+    <!-- Tablets Start -->
+    <div class="container-fluid pt-5 pb-3">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Tablets</span></h2>
+        <div class="row px-xl-5">
+            @foreach($tablets as $tablet)
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product-item-ajax" data-id="{{$tablet->id}}">
+                    <div class="product-item bg-light mb-4">
+                        <div style="height: 300px" class="product-img position-relative overflow-hidden">
+                            <img class="img-fluid w-100" src="{{asset('storage/backend/img/' . $tablet->image_1)}}" alt="">
+                            <div class="product-action">
+                                <a data-id="{{$tablet->id}}" class="btn btn-outline-dark btn-square addWishlist">
+                                    <i class="fa fa-heart"></i>
+                                </a>
+                                <a data-id="{{$tablet->id}}" class="btn btn-outline-dark btn-square addToCart">
+                                    <i class="fa fa-shopping-cart"></i>
+                                </a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center py-4">
+                            <a class="h6 text-decoration-none text-truncate" href="/product/{{$tablet->id}}">
+                                {{$tablet->product_name}} -
+                                {{$tablet->product_size}} -
+                                {{$tablet->product_color}}
+                            </a>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                <h5>{{number_format($tablet->discount_price)}} VNĐ</h5>
+                                <h6 class="text-muted ml-2">
+                                    <del>{{number_format($tablet->discount_price)}} VNĐ</del>
+                                </h6>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center mb-1">
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small>(99)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    <!-- Tablets End -->
 
     <!-- Vendor Start -->
     <div class="container-fluid py-5">
         <div class="row px-xl-5">
             <div class="col">
-                <div class="owl-carousel vendor-carousel">
-                    <div class="bg-light p-4">
+                <div class="owl-carousel vendor-carousel owl-theme">
+                    <div class="item bg-light p-4">
                         <img src="{{asset('frontend/img/vendor-1.jpg')}}" alt="">
                     </div>
-                    <div class="bg-light p-4">
+                    <div class="item bg-light p-4">
                         <img src="{{asset('frontend/img/vendor-2.jpg')}}" alt="">
                     </div>
-                    <div class="bg-light p-4">
+                    <div class="item bg-light p-4">
                         <img src="{{asset('frontend/img/vendor-3.jpg')}}" alt="">
                     </div>
-                    <div class="bg-light p-4">
+                    <div class="item bg-light p-4">
                         <img src="{{asset('frontend/img/vendor-4.jpg')}}" alt="">
                     </div>
-                    <div class="bg-light p-4">
+                    <div class="item bg-light p-4">
                         <img src="{{asset('frontend/img/vendor-5.jpg')}}" alt="">
                     </div>
-                    <div class="bg-light p-4">
+                    <div class="item bg-light p-4">
                         <img src="{{asset('frontend/img/vendor-6.jpg')}}" alt="">
                     </div>
-                    <div class="bg-light p-4">
+                    <div class="item bg-light p-4">
                         <img src="{{asset('frontend/img/vendor-7.jpg')}}" alt="">
                     </div>
-                    <div class="bg-light p-4">
+                    <div class="item bg-light p-4">
                         <img src="{{asset('frontend/img/vendor-8.jpg')}}" alt="">
                     </div>
                 </div>

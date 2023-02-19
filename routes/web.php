@@ -14,6 +14,7 @@
 // BACKEND
 Route::namespace("Admin")->prefix('admin')->group(function(){
 	Route::get('/', 'HomeController@index')->name('admin.dashboard');
+
 	Route::namespace('Auth')->group(function(){
 		Route::get('/login', 'LoginController@showLoginForm')->name('admin.login');
 		Route::post('/login', 'LoginController@login');
@@ -45,6 +46,12 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 
     // Orders
     Route::resource('orders', 'OrderController');
+    Route::put('orders/change-status/{order_id}', 'OrderController@changeStatus')->name('orders.changeStatus');
+
+    // Coupons
+    Route::resource('coupons', 'CouponController');
+
+
 });
 
 
@@ -55,6 +62,8 @@ Route::namespace("Admin")->prefix('admin')->group(function(){
 
 // FRONTEND
 Route::get('/', 'PageController@index');
+Route::post('/searchajax', 'PageController@searchajax')->name('searchajax');
+Route::get('/search', 'PageController@search')->name('search');
 
 // Products
 Route::get('/products', 'PageController@showProducts');
@@ -64,6 +73,7 @@ Route::get('/product-by-category/{category_id}', 'PageController@showProductByCa
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
+
 
 // Wishlist
 Route::get('/wishlist/add/{product_id}', 'WishlistController@addWishlist')->name('wishlist.add');
@@ -77,7 +87,7 @@ Route::get('/contact', 'PageController@showContact')->name('contact');
 Route::post('/cart/add', 'CartController@addToCart')->name('cart.add');
 Route::get('/cart/index', 'CartController@showCart')->name('cart.index');
 Route::delete('/cart/remove/{rowId}', 'CartController@removeCartItem')->name('cart.remove');
-Route::patch('/cart/update', 'CartController@updateCart')->name('cart.update'); 
+Route::patch('/cart/update', 'CartController@updateCart')->name('cart.update');
 
 // Checkout
 Route::get('/checkout', 'CheckoutController@checkout')->name('checkout');

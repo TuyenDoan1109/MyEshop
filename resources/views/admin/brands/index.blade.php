@@ -15,14 +15,14 @@
             <table id="datatable1" class="table display responsive nowrap">
                 <thead>
                     <tr>
-                        <th class="wd-15p"></th>
-                        <th class="wd-15p">Brand Name</th>
-                        <th class="wd-15p">Brand Logo</th>
+                        <th class="wd-15p">S/n</th>
+                        <th class="wd-15p">Name</th>
+                        <th class="wd-15p">Logo</th>
                         <th class="wd-20p">Action</th>
                     </tr>
                 </thead>
 
-                <tbody>                
+                <tbody>
                     @if(count($brands) > 0)
                         @foreach($brands as $key=>$brand)
                         <tr>
@@ -30,20 +30,18 @@
                             <td>{{$brand->brand_name}}</td>
                             <td>
                                 @if($brand->brand_logo)
-                                    <img width="100px" height="100px" src="{{asset("storage/backend/img/$band->brand_logo")}}" alt="">
+                                    <img width="100px" height="100px" src="{{asset("storage/backend/img/$brand->brand_logo")}}" alt="">
                                 @else
                                     <img width="100px" height="100px" src="{{asset("storage/backend/img/noimage.jpg")}}" alt="">
                                 @endif
                             </td>
-                            <td>
-                                <a href="{{route('brands.edit', $brand->id)}}" class="btn btn-sm btn-info">Edit</a>
-                                <a class="btn btn-sm btn-danger text-light" onclick="event.preventDefault();
-                                    document.getElementById('delete-brand-form-{{$brand->id}}').submit();">
-                                    Delete
-                                </a>
-                                <form id="delete-brand-form-{{$brand->id}}" action="{{ route('brands.destroy', $brand->id) }}" method="POST"   style="display: none;">
+                            <td class="form-inline">
+                                <a href="{{route('brands.edit', $brand->id)}}" class="btn btn-sm btn-info form-control mr-1">Edit</a>
+                                <form action="{{ route('brands.destroy', $brand->id) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure')">
                                     @csrf
                                     @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger text-light">Delete</button>
                                 </form>
                             </td>
                         </tr>

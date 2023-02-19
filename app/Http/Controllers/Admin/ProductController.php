@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Product;
-use App\Category;
-use App\Subcategory;
-use App\Brand;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -22,10 +22,10 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::OrderBy('created_at', 'desc')->get();
-        return view('admin.products.index')->with('products', $products);
+        $products = Product::latest()->paginate(10);
+        return view('admin.products.index', compact('products'));
     }
 
     /**
@@ -47,7 +47,7 @@ class ProductController extends Controller
         foreach($subcategories as $subcategory) {
             $html .= '<option value="'. $subcategory->id .'">' . $subcategory->subcategory_name . '</option>';
         }
-        return $html; 
+        return $html;
     }
 
     /**
@@ -85,7 +85,7 @@ class ProductController extends Controller
             // Get just ext
             $extension1 = $request->file('image_1')->getClientOriginalExtension();
             // Filename to store
-            $filenameToStore1 = $filename1 . '_' . time() . '.' . $extension1; 
+            $filenameToStore1 = $filename1 . '_' . time() . '.' . $extension1;
             // Upload image
             $path1 = $request->file('image_1')->storeAs('public/backend/img', $filenameToStore1);
         } else {
@@ -96,7 +96,7 @@ class ProductController extends Controller
             $filenameWithExt2 = $request->file('image_2')->getClientOriginalName();
             $filename2 = pathinfo($filenameWithExt2, PATHINFO_FILENAME);
             $extension2 = $request->file('image_2')->getClientOriginalExtension();
-            $filenameToStore2 = $filename2 . '_' . time() . '.' . $extension2; 
+            $filenameToStore2 = $filename2 . '_' . time() . '.' . $extension2;
             $path2 = $request->file('image_2')->storeAs('public/backend/img', $filenameToStore2);
         } else {
             $filenameToStore2 = 'noimage.jpg';
@@ -106,7 +106,7 @@ class ProductController extends Controller
             $filenameWithExt3 = $request->file('image_3')->getClientOriginalName();
             $filename3 = pathinfo($filenameWithExt3, PATHINFO_FILENAME);
             $extension3 = $request->file('image_3')->getClientOriginalExtension();
-            $filenameToStore3 = $filename3 . '_' . time() . '.' . $extension3; 
+            $filenameToStore3 = $filename3 . '_' . time() . '.' . $extension3;
             $path3 = $request->file('image_3')->storeAs('public/backend/img', $filenameToStore3);
         } else {
             $filenameToStore3 = 'noimage.jpg';
@@ -241,7 +241,7 @@ class ProductController extends Controller
             // Get just ext
             $extension1 = $request->file('image_1')->getClientOriginalExtension();
             // Filename to store
-            $filenameToStore1 = $filename1 . '_' . time() . '.' . $extension1; 
+            $filenameToStore1 = $filename1 . '_' . time() . '.' . $extension1;
             // Upload image
             $path1 = $request->file('image_1')->storeAs('public/backend/img', $filenameToStore1);
             if($product->image_1 != 'noimage.jpg') {
@@ -254,7 +254,7 @@ class ProductController extends Controller
             $filenameWithExt2 = $request->file('image_2')->getClientOriginalName();
             $filename2 = pathinfo($filenameWithExt2, PATHINFO_FILENAME);
             $extension2 = $request->file('image_2')->getClientOriginalExtension();
-            $filenameToStore2 = $filename2 . '_' . time() . '.' . $extension2; 
+            $filenameToStore2 = $filename2 . '_' . time() . '.' . $extension2;
             $path2 = $request->file('image_2')->storeAs('public/backend/img', $filenameToStore2);
             if($product->image_2 != 'noimage.jpg') {
                 // Delete image 2
@@ -266,7 +266,7 @@ class ProductController extends Controller
             $filenameWithExt3 = $request->file('image_3')->getClientOriginalName();
             $filename3 = pathinfo($filenameWithExt3, PATHINFO_FILENAME);
             $extension3 = $request->file('image_3')->getClientOriginalExtension();
-            $filenameToStore3 = $filename3 . '_' . time() . '.' . $extension3; 
+            $filenameToStore3 = $filename3 . '_' . time() . '.' . $extension3;
             $path3 = $request->file('image_3')->storeAs('public/backend/img', $filenameToStore3);
             if($product->image_3 != 'noimage.jpg') {
                 // Delete image 3

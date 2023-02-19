@@ -1,15 +1,25 @@
 (function ($) {
     "use strict";
-    
+
     // Dropdown on mouse hover
     $(document).ready(function () {
         function toggleNavbarMethod() {
             if ($(window).width() > 992) {
-                $('.navbar .dropdown').on('mouseover', function () {
-                    $('.dropdown-toggle', this).trigger('click');
-                }).on('mouseout', function () {
-                    $('.dropdown-toggle', this).trigger('click').blur();
-                });
+                $('.navbar .dropdown')
+                  .on('click', function () {
+                      const href = $('.dropdown-toggle', this).attr('href')
+                      if (href) {
+                          location.href = href
+                      }
+                  })
+                  .on('mouseover', function () {
+                      $('.dropdown-toggle', this).attr('aria-expanded', 'true');
+                      $('.dropdown-menu', this).addClass('show');
+                  })
+                  .on('mouseout', function () {
+                      $('.dropdown-toggle', this).attr('aria-expanded', 'false');
+                      $('.dropdown-menu', this).removeClass('show');
+                  });
             } else {
                 $('.navbar .dropdown').off('mouseover').off('mouseout');
             }
@@ -17,8 +27,8 @@
         toggleNavbarMethod();
         $(window).resize(toggleNavbarMethod);
     });
-    
-    
+
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -37,7 +47,7 @@
     $('.vendor-carousel').owlCarousel({
         loop: true,
         margin: 29,
-        nav: true,
+        nav: false,
         autoplay: true,
         smartSpeed: 1000,
         responsive: {
@@ -99,6 +109,6 @@
         }
         button.parent().parent().find('input').val(newVal);
     });
-    
+
 })(jQuery);
 

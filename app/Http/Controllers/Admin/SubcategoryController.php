@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Subcategory;
-use App\Category;
-use App\Product;
+use App\Models\Subcategory;
+use App\Models\Category;
+use App\Models\Product;
 
 
 class SubcategoryController extends Controller
@@ -93,7 +93,7 @@ class SubcategoryController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'subcategory_name' => 'required|max:255|unique:subcategories,subcategory_name,'.$id
+            'subcategory_name' => "required|max:255|unique:App\Models\Subcategory,subcategory_name,{$id}"
         ]);
 
         $subcategory = Subcategory::find($id);

@@ -1,86 +1,105 @@
-@extends('layouts.app')
+ @extends('layouts.app')
 
 @section('content')
 
-    @include('layouts.breadcrumb')
-    
+ @include('layouts.breadcrumb')
+
+    @php
+        if(isset($_GET['filter']['product_color'])) {
+            $filter_colors = explode(',', $_GET['filter']['product_color']);
+        } else {
+            $filter_colors = [];
+        }
+
+        if(isset($_GET['filter']['product_size'])) {
+            $filter_sizes = explode(',', strtoupper($_GET['filter']['product_size']));
+        } else {
+            $filter_sizes = [];
+        }
+
+        if(isset($_GET['filter']['subcategory_id'])) {
+            $filter_subcategories = explode(',', $_GET['filter']['subcategory_id']);
+        } else {
+            $filter_subcategories = [];
+        }
+
+        if(isset($_GET['filter']['brand_id'])) {
+            $filter_brands = explode(',', $_GET['filter']['brand_id']);
+        } else {
+            $filter_brands = [];
+        }
+
+    @endphp
+
     <!-- Shop Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
-                <!--Filter by Price Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
+
+                <!--Filter by Brands Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by brands</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form>
+                        @foreach($brandHaveProducts as $key => $item)
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="price-all">
-                            <label class="custom-control-label" for="price-all">All Price</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <input type="checkbox"
+                                {{ in_array($item->brand_id, $filter_brands) ? 'checked' : '' }}
+                                data-filters="brand"
+                                class="custom-control-input brand-filter"
+                                name="brand-filter"
+                                value="{{$item->brand_id}}"
+                                id="brand-{{$key}}"
+                                >
+                            <label class="custom-control-label" for="brand-{{$key}}">
+                                {{$item->Brand->brand_name}}
+                            </label>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-1">
-                            <label class="custom-control-label" for="price-1">$0 - $100</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-2">
-                            <label class="custom-control-label" for="price-2">$100 - $200</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-3">
-                            <label class="custom-control-label" for="price-3">$200 - $300</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-4">
-                            <label class="custom-control-label" for="price-4">$300 - $400</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="price-5">
-                            <label class="custom-control-label" for="price-5">$400 - $500</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
+                        @endforeach
                     </form>
                 </div>
-                <!--Filter by Price End -->
-                
+                <!--Filter by Brands End -->
+
+                <!--Filter by subcategories Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by subcategories</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    <form>
+                        @foreach($subcategoryHaveProducts as $key => $item)
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox"
+                            {{ in_array($item->subcategory_id, $filter_subcategories) ? 'checked' : '' }}
+                            data-filters="subcategory"
+                            class="custom-control-input subcategory-filter"
+                            name="subcategory-filter"
+                            value="{{$item->subcategory_id}}"
+                            id="subcategory-{{$key}}"
+                            >
+                            <label class="custom-control-label" for="subcategory-{{$key}}">
+                                {{$item->Subcategory->subcategory_name}}
+                            </label>
+                        </div>
+                        @endforeach
+                    </form>
+                </div>
+                <!--Filter by subcategories End -->
+
                 <!--Filter by Color Start -->
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h5>
                 <div class="bg-light p-4 mb-30">
                     <form>
+                        @foreach($colors as $key => $item)
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="price-all">All Color</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <input type="checkbox"
+                            {{ in_array($item->product_color, $filter_colors) ? 'checked' : '' }}
+                            data-filters="color"
+                            class="custom-control-input color-filter"
+                            name="color-filter"
+                            value="{{ucfirst($item->product_color)}}"
+                            id="color-{{$key}}"
+                            >
+                            <label class="custom-control-label" for="color-{{$key}}">{{ucfirst($item->product_color)}}</label>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-2">
-                            <label class="custom-control-label" for="color-2">White</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-3">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-4">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="color-5">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
+                        @endforeach
                     </form>
                 </div>
                 <!--Filter by Color End -->
@@ -88,37 +107,19 @@
                 <!--Filter by Size Start -->
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by size</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form action="" method="post">
+                        @foreach ($sizes as $key => $item)
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All Size</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <input type="checkbox"
+                                {{ in_array($item->product_size, $filter_sizes) ? 'checked' : '' }}
+                                data-filters="size"
+                                class="custom-control-input size-filter"
+                                value="{{strtoupper($item->product_size)}}"
+                                id="size-{{$key}}"
+                            >
+                            <label class="custom-control-label" for="size-{{$key}}">{{strtoupper($item->product_size)}}</label>
                         </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-2">
-                            <label class="custom-control-label" for="size-2">S</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-3">
-                            <label class="custom-control-label" for="size-3">M</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-4">
-                            <label class="custom-control-label" for="size-4">L</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="size-5">
-                            <label class="custom-control-label" for="size-5">XL</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
+                        @endforeach
                     </form>
                 </div>
                 <!--Filter by Size End -->
@@ -137,20 +138,62 @@
                             </div>
                             <div class="ml-2">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Latest</a>
-                                        <a class="dropdown-item" href="#">Popularity</a>
-                                        <a class="dropdown-item" href="#">Best Rating</a>
-                                    </div>
+                                    <form>
+                                        @csrf
+                                        <select name="sort" id="sort">
+                                            <option @if(strpos(Request::fullUrl(), 'sort=-created_at') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["sort" => "-created_at"])) }}">
+                                                Latest
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'sort=product_name') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["sort" => "product_name"])) }}">
+                                                Name A-Z
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'sort=-product_name') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["sort" => "-product_name"])) }}">
+                                                Name Z-A
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'sort=discount_price') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["sort" => "discount_price"])) }}">
+                                                Price Low to High
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'sort=-discount_price') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["sort" => "-discount_price"])) }}">
+                                                Price High to Low
+                                            </option>
+                                        </select>
+                                    </form>
                                 </div>
                                 <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">10</a>
-                                        <a class="dropdown-item" href="#">20</a>
-                                        <a class="dropdown-item" href="#">30</a>
-                                    </div>
+                                    <form>
+                                        @csrf
+                                        <select name="limit" id="limit">
+                                            <option @if(strpos(Request::fullUrl(), 'limit=10') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["limit" => "10"])) }}">
+                                                10
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'limit=20') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["limit" => "20"])) }}">
+                                                20
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'limit=30') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["limit" => "30"])) }}">
+                                                30
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'limit=40') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["limit" => "40"])) }}">
+                                                40
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'limit=100') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["limit" => "100"])) }}">
+                                                100
+                                            </option>
+                                            <option @if(strpos(Request::fullUrl(), 'limit=200') !== false) selected @endif
+                                                value="{{ url()->current().'?'.http_build_query(array_merge(request()->all(),["limit" => "200"])) }}">
+                                                200
+                                            </option>
+                                        </select>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -185,24 +228,153 @@
                         </div>
                     </div>
                     @endforeach
-
-                    <div class="col-12">
-                        <nav>
-                          <ul class="pagination justify-content-center">
-                            <li class="page-item disabled"><a class="page-link" href="#">Previous</span></a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                          </ul>
-                        </nav>
-                    </div>
                 </div>
+                {{ $products->links() }}
             </div>
             <!-- Shop Product End -->
         </div>
     </div>
     <!-- Shop End -->
 
+    <script>
+        $(document).ready(function() {
+
+            // Sort
+            $('#sort').on('change', function() {
+                var url = $(this).val();
+                if(url) {
+                    window.location = url;
+                }
+                return false;
+            });
+
+            // Limit
+            $('#limit').on('change', function() {
+                var url = $(this).val();
+                if(url) {
+                    window.location = url;
+                }
+                return false;
+            });
+
+            // Filter by Price Range
+            $('.price-filter').click(function() {
+                var url = [], tempArray = [];
+                $.each($("[data-filters='price']:checked"), function() {
+                    tempArray.push($(this).val());
+                });
+                // alert(tempArray);
+                let url1 = new URL(location.href);
+                url1.searchParams.delete('filter[price_range]');
+
+                if(tempArray.length !== 0) {
+                    if((url1.href).includes('?')) {
+                        url += '&filter[price_range]=' + tempArray.toString();
+                        window.location.href = (url1 + url);
+                    } else {
+                        url += '?filter[price_range]=' + tempArray.toString();
+                        window.location.href = url;
+                    }
+                } else {
+                    window.location.href = url1;
+                }
+            });
+
+            // Filter Color
+            $('.color-filter').click(function() {
+                var url = [], tempArray = [];
+                $.each($("[data-filters='color']:checked"), function() {
+                    tempArray.push($(this).val().toLowerCase());
+                });
+
+                let url1 = new URL(location.href);
+                url1.searchParams.delete('filter[product_color]');
+
+                if(tempArray.length !== 0) {
+                    if((url1.href).includes('?')) {
+
+                        url += '&filter[product_color]=' + tempArray.toString();
+                        window.location.href = (url1 + url);
+                    } else {
+                        url += '?filter[product_color]=' + tempArray.toString();
+                        window.location.href = url;
+                    }
+                } else {
+                    window.location.href = url1;
+                }
+
+            });
+
+            // Filter Size
+            $('.size-filter').click(function() {
+                var url = [], tempArray = [];
+                $.each($("[data-filters='size']:checked"), function() {
+                    tempArray.push($(this).val().toLowerCase());
+                });
+
+                let url1 = new URL(location.href);
+                url1.searchParams.delete('filter[product_size]');
+
+                if(tempArray.length !== 0) {
+                    if((url1.href).includes('?')) {
+                        url += '&filter[product_size]=' + tempArray.toString();
+                        window.location.href = (url1 + url);
+                    } else {
+                        url += '?filter[product_size]=' + tempArray.toString();
+                        window.location.href = url;
+                    }
+                } else {
+                    window.location.href = url1;
+                }
+            });
+
+            // Filter Subcategory
+            $('.subcategory-filter').click(function() {
+                var url = [], tempArray = [];
+                $.each($("[data-filters='subcategory']:checked"), function() {
+                    tempArray.push($(this).val());
+                });
+                // alert(tempArray);
+                let url1 = new URL(location.href);
+                url1.searchParams.delete('filter[subcategory_id]');
+
+                if(tempArray.length !== 0) {
+                    if((url1.href).includes('?')) {
+                        url += '&filter[subcategory_id]=' + tempArray.toString();
+                        window.location.href = (url1 + url);
+                    } else {
+                        url += '?filter[subcategory_id]=' + tempArray.toString();
+                        window.location.href = url;
+                    }
+                } else {
+                    window.location.href = url1;
+                }
+            });
+
+            // Filter Brand
+            $('.brand-filter').click(function() {
+                var url = [], tempArray = [];
+                $.each($("[data-filters='brand']:checked"), function() {
+                    tempArray.push($(this).val());
+                });
+                // alert(tempArray);
+                let url1 = new URL(location.href);
+                url1.searchParams.delete('filter[brand_id]');
+
+                if(tempArray.length !== 0) {
+                    if((url1.href).includes('?')) {
+                        url += '&filter[brand_id]=' + tempArray.toString();
+                        window.location.href = (url1 + url);
+                    } else {
+                        url += '?filter[brand_id]=' + tempArray.toString();
+                        window.location.href = url;
+                    }
+                } else {
+                    window.location.href = url1;
+                }
+            });
+
+        });
+    </script>
+
 @endsection
-   

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Brand;
-use App\Category;
-use App\Subcategory;
-use App\Product;
-use App\Wishlist;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\Product;
+use App\Models\Wishlist;
 use Auth;
 
 class HomeController extends Controller
@@ -39,9 +38,35 @@ class HomeController extends Controller
             $user_id = Auth::user()->id;
             $wishlist_count = Wishlist::where('user_id', $user_id)->count();
         }
-        $featured_products = Product::where('best_rated', 1)->get();
-        $hotdeal_products = Product::where('hot_deal', 1)->get();
+        $phones = Product::join('categories', 'products.category_id', '=', 'categories.id')
+            ->where('category_name', 'Phone')
+            ->select('products.*')
+            ->limit(8)
+            ->get();
+        $laptops = Product::join('categories', 'products.category_id', '=', 'categories.id')
+        ->where('category_name', 'Laptop')
+        ->select('products.*')
+        ->limit(8)
+        ->get();
+        $tablets = Product::join('categories', 'products.category_id', '=', 'categories.id')
+        ->where('category_name', 'Tablet')
+        ->select('products.*')
+        ->limit(8)
+        ->get();
+
+        // $trancategories = Category::join('translation_cate', 'categories.id', '=', 'translation_cate.id')
+        // ->select('translation_cate.name as transname','categories.id as cateid')->get();
+
         $currentURL = url()->current();
-        return view('home', compact('categories', 'brands', 'subcategories', 'wishlist_count', 'featured_products', 'hotdeal_products', 'currentURL'));
+        return view('home', compact(
+            'categories',
+            'brands',
+            'subcategories',
+            'wishlist_count',
+            'phones',
+            'laptops',
+            'tablets',
+            'currentURL'
+        ));
     }
 }

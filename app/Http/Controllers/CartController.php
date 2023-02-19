@@ -3,17 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Brand;
-use App\Category;
-use App\Subcategory;
-use App\Product;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\Product;
 use Cart;
-use App\Wishlist;
+use App\Models\Wishlist;
 use Auth;
-
-
-
-
 
 class CartController extends Controller
 {
@@ -32,6 +28,7 @@ class CartController extends Controller
         $data['options']['image'] = $product->image_1;
         $data['options']['size'] = $product->product_size;
         $data['options']['color'] = $color;
+        $data['options']['code'] = $product->product_code;
         Cart::add($data);
 
         $currentURL = url()->current();
@@ -85,13 +82,14 @@ class CartController extends Controller
         if($qty > 0) {
             Cart::update($rowId, $qty);
             return response()->json([
+                'shipping_fee' => '20000',
                 'result' => Cart::get($rowId),
                 'cart' => Cart::content(),
                 'initial' => Cart::initial(),
                 'tax' => Cart::tax(),
                 'total' => Cart::total(),
                 'cartCount' => Cart::count(), 
-                'shipping_fee' => '20000'
+                
             ]);
         } else {
             return $result = Cart::get($rowId);

@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Admin;
+use App\Models\Admin;
 
 class AdminSeeder extends Seeder
 {
@@ -17,6 +17,7 @@ class AdminSeeder extends Seeder
                 'name' => 'doantuyen90',
                 'email' => 'doantuyen90@gmail.com',
                 'phone' => '0936827526',
+                'address' => 'Phú Xuyên, Hà Nội',
                 'avatar' => 'tuyen_avatar.jpg',
                 'email_verified_at' => now(),
                 'password' => '$2y$10$mHArcO4i/wq0tNhaDCtTS.moH8xe2bCfPViKu9xJi8HDlYgBVGrwW',   // pas: 12345678
@@ -29,6 +30,7 @@ class AdminSeeder extends Seeder
                 'name' => 'tuyen_admin',
                 'email' => 'tuyen_admin@gmail.com',
                 'phone' => '0936827526',
+                'address' => 'Phú Xuyên, Hà Nội',
                 'avatar' => 'tuyen_avatar.jpg',
                 'email_verified_at' => now(),
                 'password' => '$2y$10$mHArcO4i/wq0tNhaDCtTS.moH8xe2bCfPViKu9xJi8HDlYgBVGrwW',   // pas: 12345678

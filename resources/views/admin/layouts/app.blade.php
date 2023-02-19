@@ -124,6 +124,17 @@
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
 
+            <a href="{{route('coupons.index')}}" class="sl-menu-link
+            @if(strpos(Request::route()->getName(), 'coupons') === 0)
+                active
+            @endif
+            ">
+                <div class="sl-menu-item">
+                    <i class="menu-item-icon icon ion-ios-filing-outline tx-24"></i>
+                    <span class="menu-item-label">Coupons</span>
+                </div><!-- menu-item -->
+            </a><!-- sl-menu-link -->
+
         </div><!-- sl-sideleft-menu -->
 
         <br>
@@ -141,7 +152,8 @@
                     <div class="dropdown">
                         <a href="" class="nav-link nav-link-profile" data-toggle="dropdown">
                             <span class="logged-name hidden-md-down">{{ auth('admin')->user()->name }}</span>
-                            <img src="{{asset('backend/img/img3.jpg')}}" class="wd-32 rounded-circle" alt="">
+                            <img src="{{asset("storage/backend/img/" . auth('admin')->user()->avatar)}}"
+                                class="wd-32 rounded-circle" alt="">
                         </a>
                         <div class="dropdown-menu dropdown-menu-header wd-200">
                             <ul class="list-unstyled user-profile-nav">
@@ -171,31 +183,81 @@
         </div><!-- sl-mainpanel -->
         <!-- ########## END: MAIN PANEL ########## -->
 
-
-        
-
         <script src="{{asset('backend/lib/jquery/jquery.js')}}"></script>
         <script src="{{asset('backend/lib/popper.js/popper.js')}}"></script>
         <script src="{{asset('backend/lib/bootstrap/bootstrap.js')}}"></script>
         <script src="{{asset('backend/lib/jquery-ui/jquery-ui.js')}}"></script>
         <script src="{{asset('backend/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js')}}"></script>
-        <script src="{{asset('backend/lib/jquery.sparkline.bower/jquery.sparkline.min.js')}}"></script>
-        <script src="{{asset('backend/lib/d3/d3.js')}}"></script>
-        <script src="{{asset('backend/lib/rickshaw/rickshaw.min.js')}}"></script>
-        <script src="{{asset('backend/lib/chart.js/Chart.js')}}"></script>
-        <script src="{{asset('backend/lib/Flot/jquery.flot.js')}}"></script>
-        <script src="{{asset('backend/lib/Flot/jquery.flot.pie.js')}}"></script>
-        <script src="{{asset('backend/lib/Flot/jquery.flot.resize.js')}}"></script>
-        <script src="{{asset('backend/lib/flot-spline/jquery.flot.spline.js')}}"></script>
-        <script src="{{asset('backend/js/starlight.js')}}"></script>
-        <script src="{{asset('backend/js/ResizeSensor.js')}}"></script>
-        <script src="{{asset('backend/js/dashboard.js')}}"></script>
+        {{-- <script src="{{asset('backend/js/dashboard.js')}}"></script> --}}
+        {{-- <script src="{{asset('backend/js/starlight.js')}}"></script>          --}}
         <script src="{{asset('backend/lib/datatables/jquery.dataTables.js')}}"></script>
         <script src="{{asset('backend/lib/datatables-responsive/dataTables.responsive.js')}}"></script>
-
-        <script src="{{asset('/vendor/japonline/laravel-ckeditor/ckeditor.js')}}"></script>
+        {{-- <script src="{{asset('/vendor/japonline/laravel-ckeditor/ckeditor.js')}}"></script> --}}
         <script>
-            CKEDITOR.replace( 'article-ckeditor' );
+
+            $(document).ready(function() {
+
+                // Change Order Status Ajax
+                $('.order-status-backend').on('change', function(event) {
+                    // alert('awssdfd');
+                    var ele = $(this);
+                    var order_id = ele.closest('tr').data("id");
+                    var order_status_id = ele.find(":selected").val();
+                    // alert(order_status_id);
+
+                    $.ajax({
+                        url: "/admin/orders/change-status/" + order_id,
+                        method: "put",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            order_status_id: order_status_id
+                        },
+                        datType: "json",
+                        success: function(response) {
+                            // console.log(ele);
+                            var selectElment = event.target.options[event.target.selectedIndex].closest('select');
+                            var textSelected = event.target.options[event.target.selectedIndex].text;
+                            // alert(textSelected);
+                            console.log(selectElment);
+                            selectElment.attr('style', 'color: blue !important');
+
+                            // var wishlistCountElement = $('#wishlist-count');
+                            // var wishlist_count = data['wishlist_count'];
+                            // wishlistCountElement.html(wishlist_count);
+                            // const Toast = Swal.mixin({
+                            // toast: true,
+                            // position: 'top-end',
+                            // showConfirmButton: false,
+                            // timer: 3000,
+                            // timerProgressBar: true,
+                            // onOpen: (toast) => {
+                            //     toast.addEventListener('mouseenter', Swal.stopTimer)
+                            //     toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            // }
+                            // });
+
+                            // if($.isEmptyObject(data.error)) {
+                            //     Toast.fire({
+                            //     icon: 'success',
+                            //     title: data.success
+                            //     })
+                            // } else {
+                            //     Toast.fire({
+                            //     icon: 'error',
+                            //     title: data.error
+                            //     })
+                            // }
+                        }
+                    });
+                });
+
+
+            });
+        </script>
+
+        <script>
+            // CKeditor
+            // CKEDITOR.replace( 'article-ckeditor' );
         </script>
 
     </body>

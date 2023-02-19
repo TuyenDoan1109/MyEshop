@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Brand;
-use App\Category;
-use App\Subcategory;
-use App\Product;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\Product;
 use Cart;
-use App\Order;
-use App\OrderDetail;
-use App\PaymentMethod;
-use App\Shipping;
-use App\OrderStatus;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\PaymentMethod;
+use App\Models\Shipping;
+use App\Models\OrderStatus;
 use Auth;
-use App\Wishlist;
+use App\Models\Wishlist;
 
 class CheckoutController extends Controller
 {
@@ -84,6 +84,8 @@ class CheckoutController extends Controller
                 $order_detail->product_price = $content->price;
                 $order_detail->product_color = $content->options->color;
                 $order_detail->product_size = $content->options->size;
+                $order_detail->product_code = $content->options->code;
+                $order_detail->product_image = $content->options->image;
                 $order_detail->product_quantity = $content->qty;
                 $order_detail->save();
             }

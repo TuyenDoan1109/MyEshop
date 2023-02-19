@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Brand;
-use App\Product;
+use App\Models\Brand;
+use App\Models\Product;
 
 class BrandController extends Controller
 {
@@ -58,7 +58,7 @@ class BrandController extends Controller
             // Get just ext
             $extension = $request->file('brand_logo')->getClientOriginalExtension();
             // Filename to store
-            $filenameToStore = $filename . '_' . time() . '.' . $extension; 
+            $filenameToStore = $filename . '_' . time() . '.' . $extension;
             // Upload image
             $path = $request->file('brand_logo')->storeAs('public/backend/img', $filenameToStore);
         } else {
@@ -106,7 +106,7 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'brand_name' => 'required|unique:brands|max:255',
+            'brand_name' => "required|unique:App\Models\Brand,brand_name,{$id}|max:255",
             'brand_logo' => 'image|nullable|max:1999'
         ]);
 
@@ -119,7 +119,7 @@ class BrandController extends Controller
             // Get just ext
             $extension = $request->file('brand_logo')->getClientOriginalExtension();
             // Filename to store
-            $filenameToStore = $filename . '_' . time() . '.' . $extension; 
+            $filenameToStore = $filename . '_' . time() . '.' . $extension;
             // Upload image
             $path = $request->file('brand_logo')->storeAs('public/backend/img', $filenameToStore);
         }

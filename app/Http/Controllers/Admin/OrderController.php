@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Order;
+use App\Models\Order;
+use App\Models\OrderStatus;
 
 class OrderController extends Controller
 {
@@ -21,7 +22,8 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::orderItems();
-        return view('admin.orders.index')->with('orders', $orders);
+        $order_statuses = OrderStatus::all();
+        return view('admin.orders.index', compact('orders', 'order_statuses'));
     }
 
     /**
@@ -53,7 +55,8 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = Order::orderItem($id);
+        return view('admin.orders.show', compact('order'));
     }
 
     /**
@@ -87,6 +90,20 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Order::destroy($id);
+        $orders = Order::orderItems();
+        $order_statuses = OrderStatus::all();
+        return view('admin.orders.index', compact('orders', 'order_statuses'))->with('success', 'Deleted Order Successfully');
+    }
+
+    public function changeStatus(Request $request, $order_id) {
+        $order = Order::find($order_id);
+        $order->order_status_id = $request->order_status_id;
+        $order->save();
+        $order = Order::orderItem($order_id);
+        return response()->json([
+            'order' => $order, 
+            'success' => 'Order Status updated successfully'
+        ]);
     }
 }

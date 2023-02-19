@@ -56,9 +56,9 @@
                 </span>
             @enderror
           </div>
-          
+
           <div class="form-group">
-            <input placeholder="Confirm Password..." id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+            <input placeholder="Confirm Password..." id="password_confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
           </div>
 
           <div class="form-group tx-12">By clicking the Sign Up button below, you agreed to our privacy policy and terms of use of our website.</div>

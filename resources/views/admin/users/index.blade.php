@@ -16,15 +16,16 @@
                 <thead>
                     <tr>
                         <th class="wd-15p">S/N</th>
-                        <th class="wd-15p">User Name</th>
-                        <th class="wd-15p">User Avatar</th>
-                        <th class="wd-15p">User Email</th>
-                        <th class="wd-15p">User Phone</th>
+                        <th class="wd-15p">Name</th>
+                        <th class="wd-15p">Avatar</th>
+                        <th class="wd-15p">Email</th>
+                        <th class="wd-15p">Phone</th>
+                        <th class="wd-15p">Address</th>
                         <th class="wd-20p">Action</th>
                     </tr>
                 </thead>
 
-                <tbody>                
+                <tbody>
                     @if(count($users) > 0)
                         @foreach($users as $key=>$user)
                         <tr>
@@ -39,15 +40,14 @@
                             </td>
                             <td>{{$user->email}}</td>
                             <td>{{$user->phone}}</td>
-                            <td>
-                                <a href="{{route('users.edit', $user->id)}}" class="btn btn-sm btn-info">Edit</a>
-                                <a class="btn btn-sm btn-danger text-light" onclick="event.preventDefault();
-                                    document.getElementById('delete-user-form-{{$user->id}}').submit();">
-                                    Delete
-                                </a>
-                                <form id="delete-user-form-{{$user->id}}" action="{{ route('users.destroy', $user->id) }}" method="POST"   style="display: none;">
+                            <td>{{$user->address}}</td>
+                            <td class="form-inline">
+                                <a href="{{route('users.edit', $user->id)}}" class="btn btn-sm btn-info form-control mr-1">Edit</a>
+                                <form action="{{ route('users.destroy', $user->id)}}" method="POST"
+                                    onsubmit="return confirm('Are you sure')">
                                     @csrf
                                     @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger text-light">Delete</button>
                                 </form>
                             </td>
                         </tr>

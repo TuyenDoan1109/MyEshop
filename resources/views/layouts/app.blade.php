@@ -13,7 +13,7 @@
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
 </head>
 
 <body>
-    
+
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row bg-secondary py-1 px-xl-5">
@@ -58,6 +58,8 @@
                         @else
                             <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-user mr-2"></i>{{ Auth::user()->name }}</button>
                             <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">User Profile</a>
+                                <a class="dropdown-item" href="#">Change Password</a>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
@@ -66,11 +68,9 @@
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
-
-                                <a class="dropdown-item" href="{{route('wishlist.index', Auth::user()->id)}}">Wishlist</a>
                             </div>
                         @endguest
-                        
+
                     </div>
                     <div class="btn-group mx-2">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
@@ -98,17 +98,20 @@
                     <span class="h1 text-dark bg-primary px-2 ml-n1">EShop</span>
                 </a>
             </div>
-            <div class="col-lg-4 col-6 text-left">
-                <form action="">
+            <div class="col-lg-4 col-6 text-left searchit" style="position: relative">
+                <form action="{{route('search')}}" method="GET">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for products">
-                        <div class="input-group-append">
-                            <span class="input-group-text bg-transparent text-primary">
-                                <i class="fa fa-search"></i>
-                            </span>
-                        </div>
+                        <input id="search" type="text" class="form-control" name="searchkey" placeholder="Search for products...">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
                 </form>
+                <div id="result-search-ajax" style="width: 444px; max-height: 300px; overflow: auto;">
+                    <ul class="list-group" id="result-list" style="display:none">
+
+                    </ul>
+                </div>
             </div>
             <div class="col-lg-4 col-6 text-right">
                 <p class="m-0">Customer Service</p>
@@ -130,17 +133,22 @@
                     <div class="navbar-nav w-100">
                         @foreach($categories as $category)
                             <div class="nav-item dropdown dropright">
-                                <a href="/product-by-category/{{$category->id}}" class="nav-link dropdown-toggle" data-toggle="dropdown">{{$category->category_name}}<i class="fa fa-angle-right float-right mt-1"></i></a>
+                                <a href="/product-by-category/{{$category->id}}" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                    {{$category->category_name}}
+                                    <i class="fa fa-angle-right float-right mt-1"></i>
+                                </a>
                                 <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
                                     @foreach($subcategories as $subcategory)
-                                        @if($subcategory->category_id == $category->id)                                           
-                                            <a href="/product-by-subcategory/{{$subcategory->id}}" class="dropdown-item">{{$subcategory->subcategory_name}}</a>
+                                        @if($subcategory->category_id == $category->id)
+                                            <a href="/product-by-subcategory/{{$subcategory->id}}" class="dropdown-item">
+                                                {{$subcategory->subcategory_name}}
+                                            </a>
                                         @endif
                                     @endforeach
                                 </div>
                             </div>
                         @endforeach
-                        
+
                     </div>
                 </nav>
             </div>
@@ -161,7 +169,7 @@
                             @endif
                             ">Home</a>
 
-                            <a href="/products" class="nav-item nav-link 
+                            <a href="/products" class="nav-item nav-link
                             @if($currentURL == 'http://myeshop.test/products')
                                 active
                             @endif
@@ -170,7 +178,7 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                    <a href="{{route('cart.index')}}" class="dropdown-item 
+                                    <a href="{{route('cart.index')}}" class="dropdown-item
                                     @if($currentURL == 'http://myeshop.test/cart/index')
                                         active
                                     @endif
@@ -296,11 +304,50 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    
+
     <script type="text/javascript">
         $(document).ready(function() {
 
-            // Add to Wishlist Ajax 
+            // Dropdown menu
+            $(document).ready(function () {
+                function toggleNavbarMethod() {
+                    if ($(window).width() > 992) {
+                        $('.navbar .dropdown')
+                        .on('click', function () {
+                            const href = $('.dropdown-toggle', this).attr('href')
+                            if (href) {
+                                location.href = href
+                            }
+                        })
+                        .on('mouseover', function () {
+                            $('.dropdown-toggle', this).attr('aria-expanded', 'true');
+                            $('.dropdown-menu', this).addClass('show');
+                        })
+                        .on('mouseout', function () {
+                            $('.dropdown-toggle', this).attr('aria-expanded', 'false');
+                            $('.dropdown-menu', this).removeClass('show');
+                        });
+                    } else {
+                        $('.navbar .dropdown').off('mouseover').off('mouseout');
+                    }
+                }
+                toggleNavbarMethod();
+                $(window).resize(toggleNavbarMethod);
+            });
+
+            $('.loop').owlCarousel({
+                center: true,
+                items:2,
+                loop:true,
+                margin:10,
+                responsive:{
+                    600:{
+                        items:4
+                    }
+                }
+            });
+
+            // Add to Wishlist Ajax
             $('.addWishlist').on('click', function(event) {
                 event.preventDefault();
                 var id = $(this).closest('.product-item-ajax').data("id");
@@ -324,8 +371,8 @@
                             toast.addEventListener('mouseleave', Swal.resumeTimer)
                         }
                         });
-    
-                        if($.isEmptyObject(data.error)) {   
+
+                        if($.isEmptyObject(data.error)) {
                             Toast.fire({
                             icon: 'success',
                             title: data.success
@@ -338,9 +385,9 @@
                         }
                     }
                 });
-            });  
-            
-            // Add to Cart Ajax 
+            });
+
+            // Add to Cart Ajax
             $('.addToCart').on('click', function(event) {
                 event.preventDefault();
                 var ele = $(this);
@@ -381,8 +428,8 @@
                             toast.addEventListener('mouseleave', Swal.resumeTimer)
                         }
                         });
-    
-                        if($.isEmptyObject(data.error)) {   
+
+                        if($.isEmptyObject(data.error)) {
                             Toast.fire({
                             icon: 'success',
                             title: data.success
@@ -395,8 +442,8 @@
                         }
                     }
                 });
-            });  
-            
+            });
+
             // Update Cart Quantity Ajax
             $(".qty").change(function(e) {
                 e.preventDefault();
@@ -405,8 +452,8 @@
                     url: '{{ route('cart.update') }}',
                     method: "patch",
                     data: {
-                        _token: '{{ csrf_token() }}', 
-                        rowId: ele.parents("tr").attr("data-id"), 
+                        _token: '{{ csrf_token() }}',
+                        rowId: ele.parents("tr").attr("data-id"),
                         qty: ele.parents("tr").find(".qty").val()
                     },
                     success: function(response) {
@@ -425,7 +472,7 @@
                         taxElement.html(tax.toLocaleString('en-US') + ' VNĐ');
                         totalElement.html(total.toLocaleString('en-US') + ' VNĐ');
                         cartCountElement.html(cartCount);
-                    } 
+                    }
                 });
             });
 
@@ -439,7 +486,7 @@
                     method: "delete",
                     data: {
                         _token: '{{ csrf_token() }}'
-                        // rowId: ele.parents("tr").attr("data-id"), 
+                        // rowId: ele.parents("tr").attr("data-id"),
                     },
                     success: function(result) {
                         var cartCount = Number(result['cartCount']);
@@ -459,7 +506,7 @@
                         if(cartCount == 0) {
                             var tableElement = $("#table");
                             tableElement.html('<p class="text-center">Your cart is empty!</p >');
-                        }   
+                        }
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -471,7 +518,7 @@
                                 toast.addEventListener('mouseleave', Swal.resumeTimer)
                             }
                         });
-                        if($.isEmptyObject(result.error)) {   
+                        if($.isEmptyObject(result.error)) {
                             Toast.fire({
                             icon: 'success',
                             title: result.success
@@ -485,8 +532,8 @@
                     }
                 });
             });
-            
-            // Delete Product on Wishlist Ajax 
+
+            // Delete Product on Wishlist Ajax
             $('.delete-product-wishlist').on('click', function(event) {
                 var ele = $(this);
                 var id = ele.parents("tr").attr("data-id");
@@ -520,7 +567,7 @@
                         }
                         });
 
-                        if($.isEmptyObject(data.error)) {   
+                        if($.isEmptyObject(data.error)) {
                             Toast.fire({
                             icon: 'success',
                             title: data.success
@@ -533,7 +580,45 @@
                         }
                     }
                 });
-            }); 
+            });
+
+            // Search Products Ajax
+            $('#search').keyup(function() {
+                var searchkey = $('#search').val().trim();
+                if(searchkey == "") {
+                    $("#result-search-ajax").html("");
+                    $('#result-list').hide();
+                } else {
+                    $.ajax({
+                        url: "/searchajax",
+                        type: "POST",
+                        datType: "json",
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            searchkey: searchkey
+                        },
+                        success: function(data) {
+                            $('#result-search-ajax').empty().html(data);
+                            $('#result-search-ajax').css({
+                                "position": "absolute",
+                                "z-index": "9999"
+                            });
+                            $('#result-list').show();
+                        }
+                    });
+                }
+            });
+
+            // Toggle Dropdown Search Suggestion
+            $('#search').on('blur', function(e){
+                $("#result-search-ajax").fadeOut(500);
+            });
+
+            $('#search').on('focus', function(){
+                $("#result-search-ajax").show();
+            });
+
+
 
         });
     </script>

@@ -123,6 +123,10 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'paginate' => [
+        'per_page' => 2,
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Category;
-use App\Subcategory;
+use App\Models\Category;
+use App\Models\Subcategory;
 
 
 class CategoryController extends Controller
@@ -88,7 +88,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'category_name' => 'required|string|unique:categories|max:255'
+            'category_name' => "required|string|unique:App\Models\Category,category_name,{$id}|max:255"
         ]);
 
         $category = Category::find($id);
@@ -107,7 +107,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
-        
+
         $subcategories = Subcategory::where('category_id', $id)->get();
         if(count($subcategories) > 0) {
             return redirect(route('categories.index'))->with('error', 'Removed subcategories belong to this category first');
@@ -115,6 +115,6 @@ class CategoryController extends Controller
             $category->delete();
             return redirect(route('categories.index'))->with('success', 'Category removed successfully');
         }
-        
+
     }
 }

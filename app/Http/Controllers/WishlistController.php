@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Wishlist;
-use App\Brand;
-use App\Category;
-use App\Subcategory;
+use App\Models\Wishlist;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Subcategory;
 
 class WishlistController extends Controller
 {

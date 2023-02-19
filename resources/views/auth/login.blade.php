@@ -14,12 +14,12 @@
 				<div class="col-12 col-md-8 col-lg-6 col-xl-5">
 					<div class="card shadow-2-strong" style="border-radius: 1rem;">
 						<div class="card-body p-5 text-center">
-		
+
 							<h3 class="mb-5">User Login</h3>
 							<form action="{{ route('login') }}" method="post">
 								@csrf
-								<input placeholder="Enter Your Email..." id="email" type="text" 
-								class="form-control mb-4 @error('email') is-invalid @enderror" name="email" 
+								<input placeholder="Enter Your Email..." id="email" type="text"
+								class="form-control mb-4 @error('email') is-invalid @enderror" name="email"
 								value="{{ old('email') }}"  autocomplete="email" autofocus>
 								@error('email')
 									<span class="invalid-feedback mb-4" role="alert">
@@ -27,8 +27,8 @@
 									</span>
 								@enderror
 
-								<input placeholder="Enter Your Password..." id="password" type="password" 
-								class="form-control mb-4 @error('password') is-invalid @enderror" name="password" 
+								<input placeholder="Enter Your Password..." id="password" type="password"
+								class="form-control mb-4 @error('password') is-invalid @enderror" name="password"
 								 autocomplete="password">
 								@error('password')
 									<span class="invalid-feedback mb-4" role="alert">
@@ -39,16 +39,19 @@
 									<input class="form-check-input" type="checkbox" value="" id="form1Example3" />
 									<label class="form-check-label" for="form1Example3"> Remember me</label>
 								</div>
+                                {{-- <div class="form-control">
+                                </div> --}}
 								<button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
 							</form>
+                            <a class="mt-5" href="#">Forgot password ?</a>
 
-							<hr class="my-4">
-				
+							{{-- <hr class="my-4">
+
 							<button class="btn btn-lg btn-block btn-primary" style="background-color: #dd4b39;"
 								type="submit"><i class="fab fa-google me-2"></i> Sign in with google</button>
 							<button class="btn btn-lg btn-block btn-primary mb-2" style="background-color: #3b5998;"
-								type="submit"><i class="fab fa-facebook-f me-2"></i>Sign in with facebook</button>
-	  
+								type="submit"><i class="fab fa-facebook-f me-2"></i>Sign in with facebook</button> --}}
+
 						</div>
 			  		</div>
 				</div>
